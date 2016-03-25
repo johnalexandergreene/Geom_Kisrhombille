@@ -1,4 +1,4 @@
-package org.fleen.geom_Kisrhombille.util;
+package org.fleen.geom_Kisrhombille.app.docGraphics;
 
 import java.awt.Container;
 import java.awt.Graphics;
@@ -11,7 +11,7 @@ import javax.swing.WindowConstants;
 
 import org.fleen.geom_2D.GD;
 
-public class CKGIWindow extends JFrame{
+public class DGUI extends JFrame{
   
   private static final long serialVersionUID=8413646909208773971L;
 
@@ -21,7 +21,7 @@ public class CKGIWindow extends JFrame{
    * ################################
    */
   
-  CKGIWindow(CreateKGridImage ckgi){
+  DGUI(DocGraphics ckgi){
     this.ckgi=ckgi;;
     setBounds(400,50,1000,800);
     setVisible(true);
@@ -33,7 +33,7 @@ public class CKGIWindow extends JFrame{
    * ################################
    */
   
-  CreateKGridImage ckgi;
+  DocGraphics ckgi;
   
   /*
    * ################################

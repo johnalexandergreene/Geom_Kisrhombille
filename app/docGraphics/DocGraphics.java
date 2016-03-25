@@ -1,4 +1,4 @@
-package org.fleen.geom_Kisrhombille.util;
+package org.fleen.geom_Kisrhombille.app.docGraphics;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -21,7 +21,7 @@ import org.fleen.geom_Kisrhombille.KGrid;
 /*
  * for documentation and such
  */
-public class CreateKGridImage{
+public class DocGraphics{
   
   /*
    * ################################
@@ -29,7 +29,7 @@ public class CreateKGridImage{
    * ################################
    */
   
-  CreateKGridImage(){
+  DocGraphics(){
     initUI();
     initGrid();
     initImage();}
@@ -40,10 +40,10 @@ public class CreateKGridImage{
    * ################################
    */
   
-  CKGIWindow ui;
+  DGUI ui;
   
   private void initUI(){
-    ui=new CKGIWindow(this);}
+    ui=new DGUI(this);}
   
   /*
    * ################################
@@ -52,7 +52,8 @@ public class CreateKGridImage{
    */
   
   KGrid grid;
-  private static final double FISH=60;
+//  private static final double FISH=60;
+  private static final double FISH=30;
   
   private void initGrid(){
     Container c=ui.getContentPane();
@@ -93,8 +94,9 @@ public class CreateKGridImage{
     COLOR3=new Color(255,255,128);//yellow
   
   private static final double 
-    DOTSPAN0=12,
-    DOTSPAN1=44;
+    DOTSPAN0=8,
+    DOTSPAN1=12,
+    DOTSPAN2=44;
   
   private void initImage(){
     Container c=ui.getContentPane();
@@ -138,13 +140,13 @@ public class CreateKGridImage{
     
     
     //fill 6 triangles
-    for(HexClock k:clocks){
-      fillSkinnyTriangle(graphics,k,3);
-      fillSkinnyTriangle(graphics,k,4);
-      fillSkinnyTriangle(graphics,k,5);
-      fillSkinnyTriangle(graphics,k,6);
-      
-      }
+//    for(HexClock k:clocks){
+//      fillSkinnyTriangle(graphics,k,3);
+//      fillSkinnyTriangle(graphics,k,4);
+//      fillSkinnyTriangle(graphics,k,5);
+//      fillSkinnyTriangle(graphics,k,6);
+//      
+//      }
     
     //stroke triangles
     graphics.setPaint(COLOR0);
@@ -165,7 +167,7 @@ public class CreateKGridImage{
 //      
 //      }
     
-//    //paint dots on clock vertices
+////    paint dots on clock vertices
 //    graphics.setPaint(COLOR2);
 //    Ellipse2D dot=new Ellipse2D.Double();
 //    for(HexClock k:clocks)
@@ -177,18 +179,19 @@ public class CreateKGridImage{
     
     
     //paint dots on clock 6 vertices
-    DPoint[] clockpoints;
-    DPoint p;
-    Ellipse2D dot=new Ellipse2D.Double();
-    int di;
     for(HexClock k:clocks){
-      clockpoints=k.getClockPoints();
-      renderVertexDot(graphics,k,0,"0");
-      renderVertexDot(graphics,k,8,"1");
-      renderVertexDot(graphics,k,7,"2");
-      renderVertexDot(graphics,k,6,"3");
-      renderVertexDot(graphics,k,5,"4");
-      renderVertexDot(graphics,k,4,"5");
+//      renderVertexDot(graphics,k,0,"0");
+//      renderVertexDot(graphics,k,8,"1");
+//      renderVertexDot(graphics,k,7,"2");
+//      renderVertexDot(graphics,k,6,"3");
+//      renderVertexDot(graphics,k,5,"4");
+//      renderVertexDot(graphics,k,4,"5");
+      renderVertexDot(graphics,k,0,null);
+      renderVertexDot(graphics,k,8,null);
+      renderVertexDot(graphics,k,7,null);
+      renderVertexDot(graphics,k,6,null);
+      renderVertexDot(graphics,k,5,null);
+      renderVertexDot(graphics,k,4,null);
       }
     
     
@@ -211,14 +214,14 @@ public class CreateKGridImage{
     Ellipse2D dot=new Ellipse2D.Double();
     DPoint[] clockpoints=clock.getClockPoints();
     DPoint p=clockpoints[i];
-    dot.setFrame(p.x-DOTSPAN1/2,p.y-DOTSPAN1/2,DOTSPAN1,DOTSPAN1);
-    g.setPaint(Color.white);
+    dot.setFrame(p.x-DOTSPAN0/2,p.y-DOTSPAN0/2,DOTSPAN0,DOTSPAN0);
+    g.setPaint(COLOR1);
     g.fill(dot);
-    g.setPaint(COLOR0);
+    g.setPaint(COLOR1);
     g.draw(dot);
     //
     if(text!=null){
-      g.setPaint(COLOR2);
+      g.setPaint(COLOR1);
       g.setFont(new Font("Sans",Font.PLAIN,17));
       String z=clock.cant+","+clock.cbat+",";
       g.drawString(z,(float)p.x-13,(float)p.y+1);
@@ -270,7 +273,7 @@ public class CreateKGridImage{
    */
   
   public static final void main(String[] a){
-    CreateKGridImage ckgi=new CreateKGridImage();
+    DocGraphics ckgi=new DocGraphics();
     
     
   }
