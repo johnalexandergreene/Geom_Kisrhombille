@@ -108,22 +108,20 @@ public class DocGraphics{
     graphics.fillRect(0,0,w,h);
     //
     
-    List<HexClock> clocks=getHexClocks(6);
+    List<HexClock> clocks=getHexClocks(8);
     
     
     
-//    //stroke hexagon
-//    graphics.setPaint(COLOR_STROKE0);
-//    BasicStroke s=new BasicStroke(2f,BasicStroke.CAP_SQUARE,BasicStroke.JOIN_ROUND,0,null,0);
-//    graphics.setStroke(s);
-//    List<HexClock> clocks=getHexClocks(12);
-//    Path2D path;
-//    for(HexClock k:clocks){
-//      path=k.getHexagon().getPath2D();
-//      graphics.draw(path);}
+    //stroke hexagon
+    graphics.setPaint(COLOR0);
+    BasicStroke s=new BasicStroke(4f,BasicStroke.CAP_SQUARE,BasicStroke.JOIN_ROUND,0,null,0);
+    graphics.setStroke(s);
+    Path2D path;
+    for(HexClock k:clocks){
+      path=k.getHexagon().getPath2D();
+      graphics.draw(path);}
     
 //    //fill hexagon
-    Path2D path;
 //    int a;
 //    for(HexClock k:clocks){
 //      a=k.cant%3;
@@ -149,13 +147,13 @@ public class DocGraphics{
 //      }
     
     //stroke triangles
-    graphics.setPaint(COLOR0);
-    Stroke s=new BasicStroke(4f,BasicStroke.CAP_SQUARE,BasicStroke.JOIN_ROUND,0,null,0);
-    graphics.setStroke(s);
-    for(HexClock k:clocks)
-      for(DPolygon triangle:k.getTriangles()){
-        path=triangle.getPath2D();
-        graphics.draw(path);}
+//    graphics.setPaint(COLOR0);
+//    Stroke s=new BasicStroke(4f,BasicStroke.CAP_SQUARE,BasicStroke.JOIN_ROUND,0,null,0);
+//    graphics.setStroke(s);
+//    for(HexClock k:clocks)
+//      for(DPolygon triangle:k.getTriangles()){
+//        path=triangle.getPath2D();
+//        graphics.draw(path);}
     
     
 //    //stroke 6 triangles
@@ -179,20 +177,20 @@ public class DocGraphics{
     
     
     //paint dots on clock 6 vertices
-    for(HexClock k:clocks){
+//    for(HexClock k:clocks){
 //      renderVertexDot(graphics,k,0,"0");
 //      renderVertexDot(graphics,k,8,"1");
 //      renderVertexDot(graphics,k,7,"2");
 //      renderVertexDot(graphics,k,6,"3");
 //      renderVertexDot(graphics,k,5,"4");
 //      renderVertexDot(graphics,k,4,"5");
-      renderVertexDot(graphics,k,0,null);
-      renderVertexDot(graphics,k,8,null);
-      renderVertexDot(graphics,k,7,null);
-      renderVertexDot(graphics,k,6,null);
-      renderVertexDot(graphics,k,5,null);
-      renderVertexDot(graphics,k,4,null);
-      }
+//      renderVertexDot(graphics,k,0,null);
+//      renderVertexDot(graphics,k,8,null);
+//      renderVertexDot(graphics,k,7,null);
+//      renderVertexDot(graphics,k,6,null);
+//      renderVertexDot(graphics,k,5,null);
+//      renderVertexDot(graphics,k,4,null);
+//      }
     
     
     
@@ -214,11 +212,11 @@ public class DocGraphics{
     Ellipse2D dot=new Ellipse2D.Double();
     DPoint[] clockpoints=clock.getClockPoints();
     DPoint p=clockpoints[i];
-    dot.setFrame(p.x-DOTSPAN0/2,p.y-DOTSPAN0/2,DOTSPAN0,DOTSPAN0);
-    g.setPaint(COLOR1);
+    dot.setFrame(p.x-DOTSPAN1/2,p.y-DOTSPAN1/2,DOTSPAN1,DOTSPAN1);
+    g.setPaint(COLOR2);
     g.fill(dot);
-    g.setPaint(COLOR1);
-    g.draw(dot);
+//    g.setPaint(COLOR2);
+//    g.draw(dot);
     //
     if(text!=null){
       g.setPaint(COLOR1);
