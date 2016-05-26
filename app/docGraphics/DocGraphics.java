@@ -9,6 +9,7 @@ import java.awt.RenderingHints;
 import java.awt.Stroke;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Path2D;
+import java.awt.geom.Path2D.Double;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,6 +17,8 @@ import java.util.List;
 
 import org.fleen.geom_2D.DPoint;
 import org.fleen.geom_2D.DPolygon;
+import org.fleen.geom_2D.GD;
+import org.fleen.geom_Kisrhombille.GK;
 import org.fleen.geom_Kisrhombille.KGrid;
 
 /*
@@ -104,22 +107,21 @@ public class DocGraphics{
     image=new BufferedImage(w,h,BufferedImage.TYPE_INT_ARGB);
     Graphics2D graphics=image.createGraphics();
     graphics.setRenderingHints(RENDERING_HINTS);
-    graphics.setPaint(new Color(255,255,255));
+    graphics.setPaint(COLOR1);
     graphics.fillRect(0,0,w,h);
     //
-    
+    Path2D path;
     List<HexClock> clocks=getHexClocks(8);
     
     
     
     //stroke hexagon
-    graphics.setPaint(COLOR0);
-    BasicStroke s=new BasicStroke(4f,BasicStroke.CAP_SQUARE,BasicStroke.JOIN_ROUND,0,null,0);
-    graphics.setStroke(s);
-    Path2D path;
-    for(HexClock k:clocks){
-      path=k.getHexagon().getPath2D();
-      graphics.draw(path);}
+//    graphics.setPaint(COLOR0);
+//    BasicStroke s=new BasicStroke(4f,BasicStroke.CAP_SQUARE,BasicStroke.JOIN_ROUND,0,null,0);
+//    graphics.setStroke(s);
+//    for(HexClock k:clocks){
+//      path=k.getHexagon().getPath2D();
+//      graphics.draw(path);}
     
 //    //fill hexagon
 //    int a;
@@ -165,6 +167,15 @@ public class DocGraphics{
 //      
 //      }
     
+  //fill triangles
+  for(HexClock k:clocks){
+    fillSkinnyTriangle(graphics,k,0);
+    fillSkinnyTriangle(graphics,k,2);
+    fillSkinnyTriangle(graphics,k,4);
+    fillSkinnyTriangle(graphics,k,6);
+    fillSkinnyTriangle(graphics,k,8);
+    fillSkinnyTriangle(graphics,k,10);}
+    
 ////    paint dots on clock vertices
 //    graphics.setPaint(COLOR2);
 //    Ellipse2D dot=new Ellipse2D.Double();
@@ -206,7 +217,41 @@ public class DocGraphics{
 //      coors=k.cant+","+k.cbat+","+k.ccat;
 //      graphics.drawString(coors,(float)center.x-21,(float)center.y+7);}
     //
+//    renderHexagonCoordinateSystemAxisArrows(graphics);
+    
     ui.repaint();}
+  
+  private void renderHexagonCoordinateSystemAxisArrows(Graphics2D graphics){
+    DPoint p=new HexClock(grid,0,0,0).getPoint(0);
+    double radius=200;
+    //
+    double[] 
+      p0=GD.getPoint_PointDirectionInterval(p.x,p.y,GD.normalizeDirection((GD.PI*1.0/6.0)*5),radius),
+      p1=GD.getPoint_PointDirectionInterval(p.x,p.y,GD.normalizeDirection((GD.PI*1.0/6.0)*11),radius);
+    renderAHexagonCoordinateSystemAxis(p0,p1,"ant",graphics);
+    //
+    p0=GD.getPoint_PointDirectionInterval(p.x,p.y,GD.normalizeDirection((GD.PI*1.0/6.0)*7),radius);
+    p1=GD.getPoint_PointDirectionInterval(p.x,p.y,GD.normalizeDirection((GD.PI*1.0/6.0)*1),radius);
+    renderAHexagonCoordinateSystemAxis(p0,p1,"bat",graphics);
+    //
+    p0=GD.getPoint_PointDirectionInterval(p.x,p.y,GD.normalizeDirection((GD.PI*1.0/6.0)*9),radius);
+    p1=GD.getPoint_PointDirectionInterval(p.x,p.y,GD.normalizeDirection((GD.PI*1.0/6.0)*3),radius);
+    renderAHexagonCoordinateSystemAxis(p0,p1,"cat",graphics);
+    
+  }
+  
+  private void renderAHexagonCoordinateSystemAxis(double[] p0,double[] p1,String axisname,Graphics2D graphics){
+    Path2D path=new Path2D.Double();
+    double d=GD.getDirection_PointPoint(p1[0],p1[1],p0[0],p0[1]);
+    
+    path.moveTo(p0[0],p0[1]);
+    path.lineTo(p1[0],p1[1]);
+    graphics.setPaint(new Color(0,0,255,64));
+    BasicStroke s=new BasicStroke(24f,BasicStroke.CAP_SQUARE,BasicStroke.JOIN_ROUND,0,null,0);
+    graphics.setStroke(s);
+    graphics.draw(path);
+    
+  }
   
   private void renderVertexDot(Graphics2D g,HexClock clock,int i,String text){
     Ellipse2D dot=new Ellipse2D.Double();
@@ -230,10 +275,11 @@ public class DocGraphics{
   private void fillSkinnyTriangle(Graphics2D g,HexClock clock,int i){
     List<DPolygon> triangles=clock.getTriangles();
     DPolygon t=triangles.get(i);
-    g.setPaint(COLOR3);
+    g.setPaint(COLOR2);
     g.fill(t.getPath2D());
-    g.setPaint(COLOR1);
-    g.draw(t.getPath2D());}
+//    g.setPaint(COLOR1);
+//    g.draw(t.getPath2D());
+    }
   
   private void drawSkinnyTriangle(Graphics2D g,HexClock clock,int i){
     List<DPolygon> triangles=clock.getTriangles();

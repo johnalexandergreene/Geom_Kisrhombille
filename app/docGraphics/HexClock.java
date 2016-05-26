@@ -47,7 +47,8 @@ public class HexClock{
    * 0..5
    */
   public DPoint getPoint(int dog){
-    return new DPoint(grid.getPoint2D(cant,cbat,ccat,dog));}
+    DPoint p=new DPoint(grid.getPoint2D(cant,cbat,-ccat,dog));//flip cat for image y
+    return p;}
   
   DPolygon getHexagon(){
     DPolygon p=new DPolygon();
