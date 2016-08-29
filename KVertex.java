@@ -90,9 +90,7 @@ public class KVertex implements Serializable{
   //returns the direction from this vertex to v
   //returns DIRECTION_NULL if this vertex and v are not colinear
   public int getDirection(KVertex v){
-    return GK.getDirection_VertexVertex(
-      coors[0],coors[1],coors[2],coors[3],
-      v.coors[0],v.coors[1],v.coors[2],v.coors[3]);}
+    return GK.getDirection_VertexVertex(this,v);}
   
   public double getDistance(KVertex v){
     return GK.getDistance_VertexVertex(

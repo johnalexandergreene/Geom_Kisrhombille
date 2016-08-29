@@ -56,7 +56,8 @@ public class DocGraphics{
   
   KGrid grid;
 //  private static final double FISH=60;
-  private static final double FISH=30;
+//  private static final double FISH=30;
+  private static final double FISH=60;
   
   private void initGrid(){
     Container c=ui.getContentPane();
@@ -94,7 +95,8 @@ public class DocGraphics{
     COLOR0=new Color(64,192,64),//green
     COLOR1=new Color(192,64,64),//red
     COLOR2=new Color(64,64,64),//black
-    COLOR3=new Color(255,255,128);//yellow
+    COLOR3=new Color(255,255,128),//yellow
+    COLOR4=Color.white;
   
   private static final double 
     DOTSPAN0=8,
@@ -107,7 +109,7 @@ public class DocGraphics{
     image=new BufferedImage(w,h,BufferedImage.TYPE_INT_ARGB);
     Graphics2D graphics=image.createGraphics();
     graphics.setRenderingHints(RENDERING_HINTS);
-    graphics.setPaint(COLOR1);
+    graphics.setPaint(COLOR4);
     graphics.fillRect(0,0,w,h);
     //
     Path2D path;
@@ -149,16 +151,16 @@ public class DocGraphics{
 //      }
     
     //stroke triangles
-//    graphics.setPaint(COLOR0);
-//    Stroke s=new BasicStroke(4f,BasicStroke.CAP_SQUARE,BasicStroke.JOIN_ROUND,0,null,0);
-//    graphics.setStroke(s);
-//    for(HexClock k:clocks)
-//      for(DPolygon triangle:k.getTriangles()){
-//        path=triangle.getPath2D();
-//        graphics.draw(path);}
+    graphics.setPaint(COLOR0);
+    Stroke s=new BasicStroke(4f,BasicStroke.CAP_SQUARE,BasicStroke.JOIN_ROUND,0,null,0);
+    graphics.setStroke(s);
+    for(HexClock k:clocks)
+      for(DPolygon triangle:k.getTriangles()){
+        path=triangle.getPath2D();
+        graphics.draw(path);}
     
     
-//    //stroke 6 triangles
+    //stroke 6 triangles
 //    for(HexClock k:clocks){
 //      drawSkinnyTriangle(graphics,k,3);
 //      drawSkinnyTriangle(graphics,k,4);
@@ -168,13 +170,13 @@ public class DocGraphics{
 //      }
     
   //fill triangles
-  for(HexClock k:clocks){
-    fillSkinnyTriangle(graphics,k,0);
-    fillSkinnyTriangle(graphics,k,2);
-    fillSkinnyTriangle(graphics,k,4);
-    fillSkinnyTriangle(graphics,k,6);
-    fillSkinnyTriangle(graphics,k,8);
-    fillSkinnyTriangle(graphics,k,10);}
+//  for(HexClock k:clocks){
+//    fillSkinnyTriangle(graphics,k,0);
+//    fillSkinnyTriangle(graphics,k,2);
+//    fillSkinnyTriangle(graphics,k,4);
+//    fillSkinnyTriangle(graphics,k,6);
+//    fillSkinnyTriangle(graphics,k,8);
+//    fillSkinnyTriangle(graphics,k,10);}
     
 ////    paint dots on clock vertices
 //    graphics.setPaint(COLOR2);

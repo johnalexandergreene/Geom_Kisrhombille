@@ -33,6 +33,8 @@ public class GK{
 
   public static final double SQRT3=Math.sqrt(3.0);
   
+  public static final int AXISCOUNT=6;
+  
   /*
    * ################################
    * BASIC DIAMOND CONSTANTS AND METRICS
@@ -647,7 +649,8 @@ public class GK{
   /*
    * Given 2 vertices : v0,v1
    * get the direction from v0 to v1
-   * If the direction is invalid (not one of our 12, within error) then we return DIRECTION_NULL
+   * If the direction is invalid because the 2 vertices are not colinar (coaxial)
+   * (not one of our 12, within error) then we return DIRECTION_NULL
    */
   public static final int getDirection_VertexVertex(
     int v0a,int v0b,int v0c,int v0d,int v1a,int v1b,int v1c,int v1d){
@@ -657,10 +660,10 @@ public class GK{
     getBasicPoint2D_Vertex(v1a,v1b,v1c,v1d,p1);
     double d2d=GD.getDirection_PointPoint(p0[0],p0[1],p1[0],p1[1]);
     double[] range;
-    //filter the 2d direction value for diamond direction 0
+    //filter the 2d direction value for gkis direction 0
     if(d2d>GETDIRVV_RANGES[0][0]||d2d<GETDIRVV_RANGES[0][1])
       return 0;
-    //filter the 2d direction value for our other 11 diamond directions
+    //filter the 2d direction value for our other 11 gkis directions
     for(int i=1;i<12;i++){
       range=GETDIRVV_RANGES[i];
       if(d2d>range[0]&&d2d<range[1])
@@ -671,6 +674,12 @@ public class GK{
     return getDirection_VertexVertex(
       v0.getAnt(),v0.getBat(),v0.getCat(),v0.getDog(),
       v1.getAnt(),v1.getBat(),v1.getCat(),v1.getDog());}
+  
+//  public static final void main(String[] a){
+//    KVertex v0=new KVertex(-1,2,3,0),v1=new KVertex(-1,1,2,2);
+//    int dir=getDirection_VertexVertex(v0,v1);
+//    System.out.println("dir="+dir);
+//  }
   
   /*
    * COLINEARITY TEST
@@ -1453,18 +1462,93 @@ public class GK{
    * @param d1 another direction
    * @return the counterclockwise offset from d0 to d1
    */
-  public static final int getCCWOffset(int d0,int d1){
-    d0%=12;
-    d1%=12;
-    d0+=12;
-    d1+=12;
-    if(d1>d0)return 12-(d1-d0);
-    return d0-d1;}
+//  public static final int getCCWOffset(int d0,int d1){
+//    d0%=12;
+//    d1%=12;
+//    d0+=12;
+//    d1+=12;
+//    if(d1>d0)return 12-(d1-d0);
+//    return d0-d1;}
   
-//  //TEST getCCWOffset
-//  public static final void main(String[] a){
-//    int d0=6,d1=4;
-//    System.out.println(getCCWOffset(d0,d1));}
+  /*
+   * returns true is direction d is "between right" of the directions d0 and d1
+   * TODO TEST
+   * 
+   *     ^ d1
+   *     | 
+   *     | 
+   *     |
+   *     o ------> right
+   *     |
+   *     | 
+   *     |
+   *     V d0
+   */
+  public static final boolean isBetweenRight(int d0,int d1,int d){
+    int 
+      d0cw=getCWOffset(d,d0),
+      d1ccw=getCCWOffset(d,d1);
+    return (d0cw+d1ccw)<11;}
+  
+  /*
+   * returns true is direction d is "between right" of the directions d0 and d1
+   * TODO TEST
+   * 
+   *             ^ d1
+   *             | 
+   *             | 
+   *  left       |
+   *     <------ o
+   *             |
+   *             | 
+   *             |
+   *             V d0
+   */
+  public static final boolean isBetweenLeft(int d0,int d1,int d){
+    int 
+      d0ccw=getCCWOffset(d,d0),
+      d1cw=getCWOffset(d,d1);
+    return (d0ccw+d1cw)<11;}
+  
+  
+  /*
+   * 
+   * returns the clockwise offset of direction d1 relative to direction d0
+   * ex0 : the clockwise offset of 6 relative to 2 is 4
+   * ex1 : the clockwise offset of 0 relative to 4 is 8
+   * 
+   * 
+   *     d0
+   *    ^
+   *    | . .
+   *    |     . + clockwise offset
+   *    |     .
+   *    |     V
+   *    o-----------> d1
+   * 
+   */
+  public static final int getCWOffset(int d0,int d1){
+    if(d1>=d0)
+      return d1-d0;
+    else
+      return 12-d0+d1;}
+  
+  public static final int getCCWOffset(int d0,int d1){
+    int f=12-getCWOffset(d0,d1);
+    if(f==12)f=0;
+    return f;}
+  
+  //TEST
+  public static final void main(String[] a){
+    Random r=new Random();
+    int a0,a1,cwoff;
+    for(int i=0;i<10;i++){
+      a0=r.nextInt(12);
+      a1=r.nextInt(12);
+      cwoff=getCCWOffset(a0,a1);
+      System.out.println("a0="+a0+" : a1="+a1+" : cwoff="+cwoff);
+      
+    }}
   
   
   /*

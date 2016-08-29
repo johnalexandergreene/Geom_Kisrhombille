@@ -168,6 +168,10 @@ public class KMetagon implements Serializable{
   public KPolygon getPolygon(){
     return getPolygon(ORIGIN,DEFAULTFOREWARD,DEFAULTSCALE);}
   
+  //optionally flipped
+  public KPolygon getPolygon(boolean twist){
+    return getPolygon(ORIGIN,DEFAULTFOREWARD,DEFAULTSCALE,twist);}
+  
   /*
    * returns polygon with specified v0 and init direction. 
    * Scale is default (1.0).

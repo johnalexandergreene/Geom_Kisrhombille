@@ -11,7 +11,7 @@ import org.fleen.geom_2D.GD;
 /*
  * This is a kisrhombille grid coordinate system
  * it's parameters are :
- * twist : rotary direction of direction indexing
+ * twist : rotary direction of direction indexing, ie the chirality (?) of the vertex traversal
  * fish : basic interval
  * origin : 0,0,0,0
  * foreward : the real 2d direction at direction index 0

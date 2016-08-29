@@ -130,7 +130,7 @@ public class KPolygon extends ArrayList<KVertex> implements Serializable{
   /*
    * returns true if the specified shares at least one vertex with this
    * returns false otherwise
-   * consider using this methog with a reticulated polygon
+   * consider using this method with a reticulated polygon
    */
   public boolean touch(KPolygon p){
     for(KVertex v:p)
