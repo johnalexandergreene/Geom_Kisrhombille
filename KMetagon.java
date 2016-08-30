@@ -164,6 +164,7 @@ public class KMetagon implements Serializable{
   
   /*
    * returns the default polygon for this metagon
+   * TODO rename to "getDefaultPolygon"
    */
   public KPolygon getPolygon(){
     return getPolygon(ORIGIN,DEFAULTFOREWARD,DEFAULTSCALE);}
@@ -190,6 +191,7 @@ public class KMetagon implements Serializable{
   
   /*
    * we use this for deriving polygon from jigs
+   * v0,v1 and twist are gotten from an anchor I suppose
    */
   public KPolygon getPolygon(KVertex v0,KVertex v1,boolean twist){
     int dir=v0.getDirection(v1);
