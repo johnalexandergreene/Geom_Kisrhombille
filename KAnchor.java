@@ -21,6 +21,11 @@ public class KAnchor implements Serializable{
     this.v0=v0;
     this.v1=v1;
     this.twist=twist;}
+//  
+//  public KAnchor(KAnchor anchor){
+//    this.v0=new KVertex(anchor.v0);
+//    this.v1=new KVertex(anchor.v1);
+//    this.twist=anchor.twist;}
   
   /*
    * ################################
