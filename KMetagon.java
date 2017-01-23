@@ -286,10 +286,10 @@ public class KMetagon implements Serializable{
     int polygonsize=polygon.size();
     //test the vector and vertex counts
     if(polygonsize!=vectors.length+2)return null;
-    List<KAnchor> fits=new ArrayList<KAnchor>();
+    List<KAnchor> anchors=new ArrayList<KAnchor>();
     KVertex v0,v1;
     KPolygon protated,pmeta;
-    //get all possible fitparams, keep the ones that work
+    //get all possible anchors, keep the ones that work
     //do it for the polygon unreversed
     for(int i=0;i<polygonsize;i++){
       protated=(KPolygon)polygon.clone();
@@ -297,9 +297,9 @@ public class KMetagon implements Serializable{
       v0=protated.get(0);
       v1=protated.get(1);
       pmeta=getPolygon(v0,v1,true);
-      if(pmeta!=null&&protated.equals(pmeta))fits.add(new KAnchor(v0,v1,true));
+      if(pmeta!=null&&protated.equals(pmeta))anchors.add(new KAnchor(v0,v1,true));
       pmeta=getPolygon(v0,v1,false);
-      if(pmeta!=null&&protated.equals(pmeta))fits.add(new KAnchor(v0,v1,false));}
+      if(pmeta!=null&&protated.equals(pmeta))anchors.add(new KAnchor(v0,v1,false));}
     //do it for the polygon reversed
     KPolygon preversed=(KPolygon)polygon.clone();
     Collections.reverse(preversed);
@@ -309,12 +309,12 @@ public class KMetagon implements Serializable{
       v0=protated.get(0);
       v1=protated.get(1);
       pmeta=getPolygon(v0,v1,true);
-      if(pmeta!=null&&protated.equals(pmeta))fits.add(new KAnchor(v0,v1,true));
+      if(pmeta!=null&&protated.equals(pmeta))anchors.add(new KAnchor(v0,v1,true));
       pmeta=getPolygon(v0,v1,false);
-      if(pmeta!=null&&protated.equals(pmeta))fits.add(new KAnchor(v0,v1,false));}
+      if(pmeta!=null&&protated.equals(pmeta))anchors.add(new KAnchor(v0,v1,false));}
     //
-    if(fits.isEmpty())return null;
-    return fits;}
+    if(anchors.isEmpty())return null;
+    return anchors;}
   
   /*
    * ################################

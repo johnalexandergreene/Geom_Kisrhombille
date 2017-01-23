@@ -77,7 +77,7 @@ public class KPolygon extends ArrayList<KVertex> implements Serializable{
       vnext=get(inext);
       if(vprev.getDirection(v)==vprev.getDirection(vnext))
         rcv.add(v);}
-    System.out.println("removed RCVs:"+rcv.size());
+//    System.out.println("removed RCVs:"+rcv.size());
     removeAll(rcv);}
   
   //get polygon2D assuming the default grid: fish=1, foreward=0, twist=true
