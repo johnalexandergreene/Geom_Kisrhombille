@@ -3,13 +3,10 @@ package org.fleen.geom_Kisrhombille.app.docGraphics;
 import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.geom.AffineTransform;
 
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
-
-import org.fleen.geom_2D.GD;
 
 public class DGUI extends JFrame{
   
@@ -21,9 +18,9 @@ public class DGUI extends JFrame{
    * ################################
    */
   
-  DGUI(DocGraphics ckgi){
-    this.ckgi=ckgi;;
-    setBounds(400,50,1000,800);
+  DGUI(DocGraphics dg){
+    this.dg=dg;
+    setExtendedState(MAXIMIZED_BOTH);
     setVisible(true);
     setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);}
   
@@ -33,7 +30,7 @@ public class DGUI extends JFrame{
    * ################################
    */
   
-  DocGraphics ckgi;
+  DocGraphics dg;
   
   /*
    * ################################
@@ -41,9 +38,17 @@ public class DGUI extends JFrame{
    * ################################
    */
   
+  AffineTransform t=new AffineTransform();
+  
   public void paint(Graphics g){
-    if(ckgi.image!=null){
-      Graphics2D h=(Graphics2D)getContentPane().getGraphics();
-      h.drawImage(ckgi.image,null,null);}}
+    if(dg.image!=null){
+      Container c=getContentPane();
+      int 
+        xoff=(c.getWidth()-dg.imagewidth)/2,
+        yoff=(c.getHeight()-dg.imageheight)/2;
+      t.setToIdentity();
+      t.translate(xoff,yoff);
+      Graphics2D h=(Graphics2D)c.getGraphics();
+      h.drawImage(dg.image,t,null);}}
 
 }
