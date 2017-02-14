@@ -1,5 +1,7 @@
 package org.fleen.geom_Kisrhombille;
 
+import org.fleen.geom_2D.DPoint;
+import org.fleen.geom_2D.GD;
 
 /*
  * ordered : (v4,v6),(v6,v12) or (v12,v4)
@@ -53,6 +55,21 @@ public class KSeg{
   
   /*
    * ################################
+   * GEOM
+   * ################################
+   */
+  
+  public boolean intersects(KSeg s){
+    DPoint 
+      s0p0=vertex0.getBasicPoint2D(),
+      s0p1=vertex1.getBasicPoint2D(),
+      s1p0=s.vertex0.getBasicPoint2D(),
+      s1p1=s.vertex1.getBasicPoint2D();
+    boolean i=GD.getIntersection_SegSeg(s0p0.x,s0p0.y,s0p1.x,s0p1.y,s1p0.x,s1p0.y,s1p1.x,s1p1.y)!=null;
+    return i;}
+  
+  /*
+   * ################################
    * OBJECT
    * ################################
    */
@@ -72,10 +89,8 @@ public class KSeg{
         vertex1.coors[3];}
     return hashcode;}
   
-  private KSeg equals_a;
-  
   public boolean equals(Object a){
-    equals_a=(KSeg)a;
+    KSeg equals_a=(KSeg)a;
     if(equals_a.hashCode()==hashCode()){
       return 
         equals_a.vertex0.coors[0]==vertex0.coors[0]&&

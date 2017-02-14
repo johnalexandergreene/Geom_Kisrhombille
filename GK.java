@@ -1272,6 +1272,11 @@ public class GK{
     default:
       return;}}
   
+  public static final KVertex getVertex_Transitionswise(KVertex v0,int dir,int transitions){
+    int[] a=new int[4];
+    getVertex_Transitionswise(v0.getAnt(),v0.getBat(),v0.getCat(),v0.getDog(),dir,transitions,a);
+    return new KVertex(a);}
+  
   /*
    * ################################
    * CONVERT 2D COORDINATES TO GRID COORDINATES FOR STANDARD GRID

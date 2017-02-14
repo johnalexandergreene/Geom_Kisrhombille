@@ -14,11 +14,12 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 import org.fleen.geom_2D.DPoint;
-import org.fleen.geom_2D.DPolygon;
 import org.fleen.geom_2D.GD;
-import org.fleen.geom_Kisrhombille.KGrid;
+import org.fleen.geom_Kisrhombille.GK;
+import org.fleen.geom_Kisrhombille.KSeg;
 import org.fleen.geom_Kisrhombille.KVertex;
 
 /*
@@ -35,15 +36,21 @@ public class DocGraphics{
    */
 
   private static final Color 
-    WHITE=new Color(239,239,239),//almost white
-    BLACK=new Color(77,77,77),//almost black
-    GREEN=new Color(92,188,139),//green
-    TEAL=new Color(89,189,172),//teal
-    BLUE=new Color(92,158,192),//blue
-    YELLOW=new Color(213,171,69),//yellow
-    ORANGE=new Color(215,116,69),//orange
-    RED=new Color(199,71,71),//red
-    PURPLE=new Color(180,118,155);//purple
+    BLACK=new Color(0,0,0),
+    GREY0=new Color(32,32,32),
+    GREY1=new Color(64,64,64),
+    GREY2=new Color(96,96,96),
+    GREY3=new Color(128,128,128),
+    GREY4=new Color(160,160,160),
+    GREY5=new Color(192,192,192),
+    GREY6=new Color(224,224,224),
+    WHITE=new Color(255,255,255),
+    GREEN=new Color(39,184,111),
+    BLUE=new Color(36,140,192),
+    YELLOW=new Color(223,159,2),
+    ORANGE=new Color(225,75,0),
+    RED=new Color(192,19,21),
+    PURPLE=new Color(178,67,133);
         
   private static final double 
     DOTSPAN0=8,
@@ -61,8 +68,15 @@ public class DocGraphics{
     IMAGESCALE2=40;
   
   private static final int 
-    IMAGEWIDTH0=600,
-    IMAGEHEIGHT0=300;
+    //small
+    IMAGEWIDTH0=500,
+    IMAGEHEIGHT0=500,
+    //medium
+    IMAGEWIDTH1=800,
+    IMAGEHEIGHT1=400,
+    //full sheet
+    IMAGEWIDTH2=1000,
+    IMAGEHEIGHT2=2000;
    
   /*
    * ################################
@@ -70,25 +84,87 @@ public class DocGraphics{
    * ################################
    */
   
+  void generate(){
+    renderSomeKSegs();
+  }
+  
   /*
-   * a selection of KSegs on a grid
+   * KSegs on a grid
+   * get some random segs, render them and their end points
    */
   void renderSomeKSegs(){
-    initImage(IMAGEWIDTH0,IMAGEHEIGHT0,IMAGESCALE1);
-    strokeGrid(6,STROKETHICKNESS1,YELLOW);
-    KVertex 
-      s0p0=new KVertex(0,0,0,0),
-      s0p1=new KVertex(1,1,0,0);
-    strokeSeg(s0p0,s0p1,STROKETHICKNESS2,RED);
-    ui.repaint();
-    
-  }
+    //do the grid
+    initImage(IMAGEWIDTH0,IMAGEHEIGHT0,IMAGESCALE1,WHITE);
+    strokeGrid(8,STROKETHICKNESS1,GREY6);
+    //get some nonintersecting segs
+    List<KSeg> segs=null;
+    while(segs==null||segsIntersect(segs))
+      segs=getSegs(18,3,5);
+    //render segs
+    for(KSeg s:segs)
+      renderSeg(s,STROKETHICKNESS2,DOTSPAN1,GREEN);
+    //
+    ui.repaint();}
+  
+  List<KSeg> getSegs(int count,int v0range,int lengthrange){
+    List<KSeg> segs=new ArrayList<KSeg>();
+    KSeg s;
+    for(int i=0;i<count;i++){
+      s=getRandomSeg(v0range,lengthrange);
+      segs.add(s);}
+    return segs;}
+  
+  boolean segsIntersect(List<KSeg> segs){
+    for(KSeg s0:segs){
+      for(KSeg s1:segs){
+        if(s0.equals(s1))
+          continue;
+        if(s0.intersects(s1))
+          return true;}}
+    return false;}
+  
+  
+  /*
+   * for printing out a hunk of kis graph paper or whatever
+   */
+  void renderAGrid(){
+    initImage(IMAGEWIDTH2,IMAGEHEIGHT2,IMAGESCALE1,WHITE);
+    strokeGrid(12,STROKETHICKNESS1,GREY5);
+    ui.repaint();}
+  
+
+  
+
   
   /*
    * ################################
    * RENDERING UTIL
    * ################################
    */
+  
+  private KVertex getRandomPoint(int range){
+    Random r=new Random();
+    boolean valid=false;
+    int a=0,b=0,c=0,count=0;
+    while(!valid){
+      count++;
+      if(count==1000)throw new IllegalArgumentException("infinite loop");
+      a=r.nextInt(range*2)-range;
+      b=r.nextInt(range*2)-range;
+      c=r.nextInt(range*2)-range;
+      valid=(c==b-a);}
+    int d=r.nextInt(6);
+    return new KVertex(a,b,c,d);}
+  
+  private KSeg getRandomSeg(int v0range,int lengthrange){
+    KVertex v0=getRandomPoint(v0range);
+    int[] b=GK.getLiberties(v0.getDog());
+    Random r=new Random();
+    int 
+      dir=b[r.nextInt(b.length)],
+      length=r.nextInt(lengthrange)+1;
+    KVertex v1=GK.getVertex_Transitionswise(v0,dir,length);
+    return new KSeg(v0,v1);}
   
   private Stroke createStroke(double thickness){
     Stroke s=new BasicStroke((float)(thickness/imagescale),BasicStroke.CAP_SQUARE,BasicStroke.JOIN_ROUND,0,null,0);
@@ -104,6 +180,14 @@ public class DocGraphics{
     graphics.setStroke(createStroke(thickness));
     graphics.setPaint(color);
     graphics.draw(path);}
+  
+  private void renderSeg(KVertex v0,KVertex v1,double strokethickness,double dotspan,Color color){
+    strokeSeg(v0,v1,strokethickness,color);
+    renderPoint(v0,dotspan,color);
+    renderPoint(v1,dotspan,color);}
+  
+  private void renderSeg(KSeg s,double strokethickness,double dotspan,Color color){
+    renderSeg(s.getVertex0(),s.getVertex1(),strokethickness,dotspan,color);}
   
   private void strokeClock(KVertex v,double thickness,Color color){
     KVertex[] cp=getClockPoints(v);
@@ -157,30 +241,25 @@ public class DocGraphics{
     graphics.setPaint(color);
     graphics.fill(dot);}
   
-  private void renderPointCoors(KVertex v,double dotspan,Color color){
-    
-  }
   
-  
-  
-  void renderHexagonCoordinateSystemAxisArrows(Graphics2D graphics){
-    DPoint p=new HexClock(grid,0,0,0).getPoint(0);
-    double radius=200;
-    //
-    double[] 
-      p0=GD.getPoint_PointDirectionInterval(p.x,p.y,GD.normalizeDirection((GD.PI*1.0/6.0)*5),radius),
-      p1=GD.getPoint_PointDirectionInterval(p.x,p.y,GD.normalizeDirection((GD.PI*1.0/6.0)*11),radius);
-    renderAHexagonCoordinateSystemAxis(p0,p1,"ant",graphics);
-    //
-    p0=GD.getPoint_PointDirectionInterval(p.x,p.y,GD.normalizeDirection((GD.PI*1.0/6.0)*7),radius);
-    p1=GD.getPoint_PointDirectionInterval(p.x,p.y,GD.normalizeDirection((GD.PI*1.0/6.0)*1),radius);
-    renderAHexagonCoordinateSystemAxis(p0,p1,"bat",graphics);
-    //
-    p0=GD.getPoint_PointDirectionInterval(p.x,p.y,GD.normalizeDirection((GD.PI*1.0/6.0)*9),radius);
-    p1=GD.getPoint_PointDirectionInterval(p.x,p.y,GD.normalizeDirection((GD.PI*1.0/6.0)*3),radius);
-    renderAHexagonCoordinateSystemAxis(p0,p1,"cat",graphics);
-    
-  }
+//  void renderHexagonCoordinateSystemAxisArrows(Graphics2D graphics){
+//    DPoint p=new HexClock(grid,0,0,0).getPoint(0);
+//    double radius=200;
+//    //
+//    double[] 
+//      p0=GD.getPoint_PointDirectionInterval(p.x,p.y,GD.normalizeDirection((GD.PI*1.0/6.0)*5),radius),
+//      p1=GD.getPoint_PointDirectionInterval(p.x,p.y,GD.normalizeDirection((GD.PI*1.0/6.0)*11),radius);
+//    renderAHexagonCoordinateSystemAxis(p0,p1,"ant",graphics);
+//    //
+//    p0=GD.getPoint_PointDirectionInterval(p.x,p.y,GD.normalizeDirection((GD.PI*1.0/6.0)*7),radius);
+//    p1=GD.getPoint_PointDirectionInterval(p.x,p.y,GD.normalizeDirection((GD.PI*1.0/6.0)*1),radius);
+//    renderAHexagonCoordinateSystemAxis(p0,p1,"bat",graphics);
+//    //
+//    p0=GD.getPoint_PointDirectionInterval(p.x,p.y,GD.normalizeDirection((GD.PI*1.0/6.0)*9),radius);
+//    p1=GD.getPoint_PointDirectionInterval(p.x,p.y,GD.normalizeDirection((GD.PI*1.0/6.0)*3),radius);
+//    renderAHexagonCoordinateSystemAxis(p0,p1,"cat",graphics);
+//    
+//  }
   
   private void renderAHexagonCoordinateSystemAxis(double[] p0,double[] p1,String axisname,Graphics2D graphics){
     Path2D path=new Path2D.Double();
@@ -193,7 +272,7 @@ public class DocGraphics{
     graphics.setStroke(s);
     graphics.draw(path);}
   
-  private void renderVertexCoors(KVertex v,Color color){
+  private void renderPointCoors(KVertex v,Color color){
     DPoint p=v.getBasicPoint2D();
     graphics.setPaint(color);
     graphics.setFont(new Font("Sans",Font.PLAIN,17));
@@ -213,6 +292,18 @@ public class DocGraphics{
   private void initUI(){
     ui=new DGUI(this);
     ui.setBackground(Color.black);}
+  
+  /*
+   * ################################
+   * EXPORT
+   * ################################
+   */
+  
+  private static final String EXPORTDIR="";
+  
+  void export(){
+    
+  }
   
   /*
    * ################################
@@ -244,7 +335,7 @@ public class DocGraphics{
   BufferedImage image;
   Graphics2D graphics;
   
-  private void initImage(int width,int height,double scale){
+  private void initImage(int width,int height,double scale,Color fill){
     imagewidth=width;
     imageheight=height;
     imagescale=scale;
@@ -252,7 +343,7 @@ public class DocGraphics{
     image=new BufferedImage(imagewidth,imageheight,BufferedImage.TYPE_INT_ARGB);
     graphics=image.createGraphics();
     graphics.setRenderingHints(RENDERING_HINTS);
-    graphics.setPaint(WHITE);
+    graphics.setPaint(fill);
     graphics.fillRect(0,0,imagewidth,imageheight);
     graphics.setTransform(getTransform());}
   
@@ -272,12 +363,7 @@ public class DocGraphics{
     initUI();}
   
   public static final void main(String[] a){
-    DocGraphics dg=new DocGraphics();
-    dg.renderSomeKSegs();
-    //dg.export();
-    
-    
-  }
+    DocGraphics dg=new DocGraphics();}
   
   
   
