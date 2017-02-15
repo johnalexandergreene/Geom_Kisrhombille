@@ -12,13 +12,17 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import org.fleen.geom_2D.DPoint;
 import org.fleen.geom_2D.GD;
 import org.fleen.geom_Kisrhombille.GK;
+import org.fleen.geom_Kisrhombille.KPolygon;
 import org.fleen.geom_Kisrhombille.KSeg;
 import org.fleen.geom_Kisrhombille.KVertex;
 
@@ -85,14 +89,77 @@ public class DocGraphics{
    */
   
   void generate(){
-    renderSomeKSegs();
+    renderSomePolygons();
+//    renderGridWithCoordinates();
   }
   
   /*
+   * ++++++++++++++++++++++++++++++++
+   * render a kgrid with coordinates on the points
+   * ++++++++++++++++++++++++++++++++
+   */
+  
+  void renderGridWithCoordinates(){
+    //do the grid
+    initImage(IMAGEWIDTH0,IMAGEHEIGHT0,IMAGESCALE1,WHITE);
+    Set<KVertex> points=strokeGrid(8,STROKETHICKNESS1,GREY6);
+    for(KVertex p:points)
+      renderPointCoors(p,10,RED);
+    ui.repaint();}
+  
+  /*
+   * ++++++++++++++++++++++++++++++++
+   * A few polygons on a grid
+   * A little sample, to demonstrate the existence of kpolygons
+   * ++++++++++++++++++++++++++++++++
+   */
+  
+  void renderSomePolygons(){
+    //do the grid
+    initImage(IMAGEWIDTH0,IMAGEHEIGHT0,IMAGESCALE1,WHITE);
+    strokeGrid(8,STROKETHICKNESS1,GREY6);
+    //do polygons
+    KPolygon p0=new KPolygon(
+      new KVertex(-3,0,3,0),
+      new KVertex(-1,0,1,0),
+      new KVertex(-3,-2,1,0));
+    renderPolygon(p0,STROKETHICKNESS2,DOTSPAN1,GREEN);
+    p0=new KPolygon(
+      new KVertex(-1,2,3,5),
+      new KVertex(0,3,3,5),
+      new KVertex(1,2,1,5),
+      new KVertex(0,1,1,5));
+    renderPolygon(p0,STROKETHICKNESS2,DOTSPAN1,GREEN);
+    p0=new KPolygon(
+      new KVertex(-1,-2,-1,2),
+      new KVertex(0,-1,-1,0),
+      new KVertex(1,-2,-3,2),
+      new KVertex(0,-3,-3,0),
+      new KVertex(-1,-4,-3,2),
+      new KVertex(-2,-3,-1,0));
+    renderPolygon(p0,STROKETHICKNESS2,DOTSPAN1,GREEN);
+    p0=new KPolygon(
+      new KVertex(0,0,0,5),
+      new KVertex(2,2,0,5),
+      new KVertex(3,2,-1,0),
+      new KVertex(2,1,-1,0),
+      new KVertex(2,0,-2,5),
+      new KVertex(3,1,-2,5),
+      new KVertex(4,1,-3,0),
+      new KVertex(2,-1,-3,0));
+    renderPolygon(p0,STROKETHICKNESS2,DOTSPAN1,GREEN);
+    
+    ui.repaint();
+  }
+  
+  /*
+   * ++++++++++++++++++++++++++++++++
    * KSegs on a grid
    * get some random segs, render them and their end points
+   * ++++++++++++++++++++++++++++++++
    */
-  void renderSomeKSegs(){
+  
+  void renderSomeSegs(){
     //do the grid
     initImage(IMAGEWIDTH0,IMAGEHEIGHT0,IMAGESCALE1,WHITE);
     strokeGrid(8,STROKETHICKNESS1,GREY6);
@@ -123,24 +190,34 @@ public class DocGraphics{
           return true;}}
     return false;}
   
-  
   /*
+   * ++++++++++++++++++++++++++++++++
+   * Graph paper grid
    * for printing out a hunk of kis graph paper or whatever
+   * ++++++++++++++++++++++++++++++++
    */
-  void renderAGrid(){
+  
+  void renderGraphPaperGrid(){
     initImage(IMAGEWIDTH2,IMAGEHEIGHT2,IMAGESCALE1,WHITE);
     strokeGrid(12,STROKETHICKNESS1,GREY5);
     ui.repaint();}
-  
-
-  
-
   
   /*
    * ################################
    * RENDERING UTIL
    * ################################
    */
+  
+  private void renderPolygon(KPolygon polygon,double strokethickness,double dotspan,Color color){
+    int s=polygon.size(),i1;
+    KVertex p0,p1;
+    for(int i0=0;i0<s;i0++){
+      i1=i0+1;
+      if(i1==s)i1=0;
+      p0=polygon.get(i0);
+      renderPoint(p0,dotspan,color);
+      p1=polygon.get(i1);
+      strokeSeg(p0,p1,strokethickness,color);}}
   
   private KVertex getRandomPoint(int range){
     Random r=new Random();
@@ -202,15 +279,21 @@ public class DocGraphics{
    * stroke it by stroking clocks
    * start at 0,0,0,0 and move out to range.
    * this is sloppy but brief
+   * returns all involved points
    */
-  private void strokeGrid(int range,double thickness,Color color){
+  private Set<KVertex> strokeGrid(int range,double thickness,Color color){
+    Set<KVertex> points=new HashSet<KVertex>();
     boolean valid;
+    KVertex p;
     for(int ant=-range;ant<range;ant++){
       for(int bat=-range;bat<range;bat++){
         for(int cat=-range;cat<range;cat++){
           valid=(cat==bat-ant);
-          if(valid)
-            strokeClock(new KVertex(ant,bat,cat,0),thickness,color);}}}}
+          if(valid){
+            p=new KVertex(ant,bat,cat,0);
+            points.addAll(Arrays.asList(getClockPoints(p)));
+            strokeClock(p,thickness,color);}}}}
+    return points;}
   
   /*
    * 13 points
@@ -261,25 +344,34 @@ public class DocGraphics{
 //    
 //  }
   
-  private void renderAHexagonCoordinateSystemAxis(double[] p0,double[] p1,String axisname,Graphics2D graphics){
-    Path2D path=new Path2D.Double();
-    double d=GD.getDirection_PointPoint(p1[0],p1[1],p0[0],p0[1]);
-    
-    path.moveTo(p0[0],p0[1]);
-    path.lineTo(p1[0],p1[1]);
-    graphics.setPaint(new Color(0,0,255,64));
-    BasicStroke s=new BasicStroke(24f,BasicStroke.CAP_SQUARE,BasicStroke.JOIN_ROUND,0,null,0);
-    graphics.setStroke(s);
-    graphics.draw(path);}
+//  private void renderAHexagonCoordinateSystemAxis(double[] p0,double[] p1,String axisname,Graphics2D graphics){
+//    Path2D path=new Path2D.Double();
+//    double d=GD.getDirection_PointPoint(p1[0],p1[1],p0[0],p0[1]);
+//    
+//    path.moveTo(p0[0],p0[1]);
+//    path.lineTo(p1[0],p1[1]);
+//    graphics.setPaint(new Color(0,0,255,64));
+//    BasicStroke s=new BasicStroke(24f,BasicStroke.CAP_SQUARE,BasicStroke.JOIN_ROUND,0,null,0);
+//    graphics.setStroke(s);
+//    graphics.draw(path);}
   
-  private void renderPointCoors(KVertex v,Color color){
+  /*
+   * render the coordinates as 4 numbers in a square
+   * we gotta paint them onto their own image then paint the image, to get around the scale stuff
+   */
+  private void renderPointCoors(KVertex v,int fontsize,Color color){
     DPoint p=v.getBasicPoint2D();
+    AffineTransform graphicstransform=graphics.getTransform();
+    double[] pt={p.x,p.y};
+    graphicstransform.transform(pt,0,pt,0,1);
+    graphics.setTransform(new AffineTransform());
     graphics.setPaint(color);
-    graphics.setFont(new Font("Sans",Font.PLAIN,17));
+    graphics.setFont(new Font("Sans",Font.PLAIN,fontsize));
     String z=v.getAnt()+","+v.getBat()+",";
-    graphics.drawString(z,(float)p.x-13,(float)p.y+1);
+    graphics.drawString(z,(float)(pt[0]-11),(float)(pt[1]+1));
     z=v.getCat()+","+v.getDog();
-    graphics.drawString(z,(float)p.x-13,(float)p.y+15);}
+    graphics.drawString(z,(float)(pt[0]-11),(float)(pt[1]+9));
+    graphics.setTransform(graphicstransform);}
   
   /*
    * ################################
