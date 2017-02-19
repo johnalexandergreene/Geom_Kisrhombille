@@ -66,17 +66,19 @@ abstract class DocGraphics{
   static final double 
     DOTSPAN0=8,
     DOTSPAN1=12,
-    DOTSPAN2=44;
+    DOTSPAN2=16;
   
   static final float
     STROKETHICKNESS0=2f,
     STROKETHICKNESS1=3f,
-    STROKETHICKNESS2=4f;
+    STROKETHICKNESS2=4f,
+    STROKETHICKNESS3=6f;
   
   static final double 
     IMAGESCALE0=10,
     IMAGESCALE1=20,
-    IMAGESCALE2=40;
+    IMAGESCALE2=30,
+    IMAGESCALE3=60;
   
   static final int 
     //small
@@ -87,7 +89,13 @@ abstract class DocGraphics{
     IMAGEHEIGHT1=400,
     //full sheet
     IMAGEWIDTH2=1000,
-    IMAGEHEIGHT2=2000;
+    IMAGEHEIGHT2=2000,
+    //lo rez diagram 
+    IMAGEWIDTH3=1600,
+    IMAGEHEIGHT3=800;
+  
+  static final int 
+    INNEROUTERPOLYGONOFFSET0=48;
    
   void init(){
     initUI();
