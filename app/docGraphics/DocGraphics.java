@@ -2,7 +2,6 @@ package org.fleen.geom_Kisrhombille.app.docGraphics;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -20,7 +19,6 @@ import java.util.Random;
 import java.util.Set;
 
 import org.fleen.geom_2D.DPoint;
-import org.fleen.geom_2D.GD;
 import org.fleen.geom_Kisrhombille.GK;
 import org.fleen.geom_Kisrhombille.KPolygon;
 import org.fleen.geom_Kisrhombille.KSeg;
@@ -28,10 +26,19 @@ import org.fleen.geom_Kisrhombille.KVertex;
 
 /*
  * create graphics for documentation
+ * this is the general stuff
+ * specifics are in the concrete classes
  */
-
-@SuppressWarnings("unused")
-public class DocGraphics{
+abstract class DocGraphics{
+  
+  /*
+   * ################################
+   * CONSTRUCTOR 
+   * ################################
+   */
+  
+  DocGraphics(){
+    init();}
   
   /*
    * ################################
@@ -39,7 +46,7 @@ public class DocGraphics{
    * ################################
    */
 
-  private static final Color 
+  static final Color 
     BLACK=new Color(0,0,0),
     GREY0=new Color(32,32,32),
     GREY1=new Color(64,64,64),
@@ -56,22 +63,22 @@ public class DocGraphics{
     RED=new Color(192,19,21),
     PURPLE=new Color(178,67,133);
         
-  private static final double 
+  static final double 
     DOTSPAN0=8,
     DOTSPAN1=12,
     DOTSPAN2=44;
   
-  private static final float
+  static final float
     STROKETHICKNESS0=2f,
     STROKETHICKNESS1=3f,
     STROKETHICKNESS2=4f;
   
-  private static final double 
+  static final double 
     IMAGESCALE0=10,
     IMAGESCALE1=20,
     IMAGESCALE2=40;
   
-  private static final int 
+  static final int 
     //small
     IMAGEWIDTH0=500,
     IMAGEHEIGHT0=500,
@@ -82,96 +89,16 @@ public class DocGraphics{
     IMAGEWIDTH2=1000,
     IMAGEHEIGHT2=2000;
    
-  /*
-   * ################################
-   * ILLUSTRATIONS
-   * ################################
-   */
-  
-  void generate(){
-    renderSomePolygons();
-//    renderGridWithCoordinates();
-  }
-  
-  /*
-   * ++++++++++++++++++++++++++++++++
-   * render a kgrid with coordinates on the points
-   * ++++++++++++++++++++++++++++++++
-   */
-  
-  void renderGridWithCoordinates(){
-    //do the grid
-    initImage(IMAGEWIDTH0,IMAGEHEIGHT0,IMAGESCALE1,WHITE);
-    Set<KVertex> points=strokeGrid(8,STROKETHICKNESS1,GREY6);
-    for(KVertex p:points)
-      renderPointCoors(p,10,RED);
+  void init(){
+    initUI();
+    doGraphics();
     ui.repaint();}
   
-  /*
-   * ++++++++++++++++++++++++++++++++
-   * A few polygons on a grid
-   * A little sample, to demonstrate the existence of kpolygons
-   * ++++++++++++++++++++++++++++++++
-   */
-  
-  void renderSomePolygons(){
-    //do the grid
-    initImage(IMAGEWIDTH0,IMAGEHEIGHT0,IMAGESCALE1,WHITE);
-    strokeGrid(8,STROKETHICKNESS1,GREY6);
-    //do polygons
-    KPolygon p0=new KPolygon(
-      new KVertex(-3,0,3,0),
-      new KVertex(-1,0,1,0),
-      new KVertex(-3,-2,1,0));
-    renderPolygon(p0,STROKETHICKNESS2,DOTSPAN1,GREEN);
-    p0=new KPolygon(
-      new KVertex(-1,2,3,5),
-      new KVertex(0,3,3,5),
-      new KVertex(1,2,1,5),
-      new KVertex(0,1,1,5));
-    renderPolygon(p0,STROKETHICKNESS2,DOTSPAN1,GREEN);
-    p0=new KPolygon(
-      new KVertex(-1,-2,-1,2),
-      new KVertex(0,-1,-1,0),
-      new KVertex(1,-2,-3,2),
-      new KVertex(0,-3,-3,0),
-      new KVertex(-1,-4,-3,2),
-      new KVertex(-2,-3,-1,0));
-    renderPolygon(p0,STROKETHICKNESS2,DOTSPAN1,GREEN);
-    p0=new KPolygon(
-      new KVertex(0,0,0,5),
-      new KVertex(2,2,0,5),
-      new KVertex(3,2,-1,0),
-      new KVertex(2,1,-1,0),
-      new KVertex(2,0,-2,5),
-      new KVertex(3,1,-2,5),
-      new KVertex(4,1,-3,0),
-      new KVertex(2,-1,-3,0));
-    renderPolygon(p0,STROKETHICKNESS2,DOTSPAN1,GREEN);
-    
-    ui.repaint();
-  }
-  
-  /*
-   * ++++++++++++++++++++++++++++++++
-   * KSegs on a grid
-   * get some random segs, render them and their end points
-   * ++++++++++++++++++++++++++++++++
-   */
-  
-  void renderSomeSegs(){
-    //do the grid
-    initImage(IMAGEWIDTH0,IMAGEHEIGHT0,IMAGESCALE1,WHITE);
-    strokeGrid(8,STROKETHICKNESS1,GREY6);
-    //get some nonintersecting segs
-    List<KSeg> segs=null;
-    while(segs==null||segsIntersect(segs))
-      segs=getSegs(18,3,5);
-    //render segs
-    for(KSeg s:segs)
-      renderSeg(s,STROKETHICKNESS2,DOTSPAN1,GREEN);
-    //
+  void regenerate(){
+    doGraphics();
     ui.repaint();}
+  
+  abstract void doGraphics();
   
   List<KSeg> getSegs(int count,int v0range,int lengthrange){
     List<KSeg> segs=new ArrayList<KSeg>();
@@ -191,24 +118,12 @@ public class DocGraphics{
     return false;}
   
   /*
-   * ++++++++++++++++++++++++++++++++
-   * Graph paper grid
-   * for printing out a hunk of kis graph paper or whatever
-   * ++++++++++++++++++++++++++++++++
-   */
-  
-  void renderGraphPaperGrid(){
-    initImage(IMAGEWIDTH2,IMAGEHEIGHT2,IMAGESCALE1,WHITE);
-    strokeGrid(12,STROKETHICKNESS1,GREY5);
-    ui.repaint();}
-  
-  /*
    * ################################
    * RENDERING UTIL
    * ################################
    */
   
-  private void renderPolygon(KPolygon polygon,double strokethickness,double dotspan,Color color){
+  void renderPolygon(KPolygon polygon,double strokethickness,double dotspan,Color color){
     int s=polygon.size(),i1;
     KVertex p0,p1;
     for(int i0=0;i0<s;i0++){
@@ -219,7 +134,7 @@ public class DocGraphics{
       p1=polygon.get(i1);
       strokeSeg(p0,p1,strokethickness,color);}}
   
-  private KVertex getRandomPoint(int range){
+  KVertex getRandomPoint(int range){
     Random r=new Random();
     boolean valid=false;
     int a=0,b=0,c=0,count=0;
@@ -258,15 +173,15 @@ public class DocGraphics{
     graphics.setPaint(color);
     graphics.draw(path);}
   
-  private void renderSeg(KVertex v0,KVertex v1,double strokethickness,double dotspan,Color color){
+   void renderSeg(KVertex v0,KVertex v1,double strokethickness,double dotspan,Color color){
     strokeSeg(v0,v1,strokethickness,color);
     renderPoint(v0,dotspan,color);
     renderPoint(v1,dotspan,color);}
   
-  private void renderSeg(KSeg s,double strokethickness,double dotspan,Color color){
+   void renderSeg(KSeg s,double strokethickness,double dotspan,Color color){
     renderSeg(s.getVertex0(),s.getVertex1(),strokethickness,dotspan,color);}
   
-  private void strokeClock(KVertex v,double thickness,Color color){
+   void strokeClock(KVertex v,double thickness,Color color){
     KVertex[] cp=getClockPoints(v);
     int j;
     for(int i=1;i<cp.length;i++){
@@ -281,7 +196,7 @@ public class DocGraphics{
    * this is sloppy but brief
    * returns all involved points
    */
-  private Set<KVertex> strokeGrid(int range,double thickness,Color color){
+   Set<KVertex> strokeGrid(int range,double thickness,Color color){
     Set<KVertex> points=new HashSet<KVertex>();
     boolean valid;
     KVertex p;
@@ -299,7 +214,7 @@ public class DocGraphics{
    * 13 points
    * we treat v lke the center of a clock, disregard dog, branch from there.
    */
-  private KVertex[] getClockPoints(KVertex v){
+   KVertex[] getClockPoints(KVertex v){
     int a=v.getAnt(),b=v.getBat(),c=v.getCat();
     KVertex[] w={ 
       new KVertex(a,b,c,0),//center
@@ -317,7 +232,7 @@ public class DocGraphics{
       new KVertex(a,b,c,1)};
     return w;}
   
-  private void renderPoint(KVertex v,double dotspan,Color color){
+   void renderPoint(KVertex v,double dotspan,Color color){
     DPoint p=v.getBasicPoint2D();
     dotspan=dotspan/imagescale;
     Ellipse2D dot=new Ellipse2D.Double(p.x-dotspan/2,p.y-dotspan/2,dotspan,dotspan);
@@ -344,7 +259,7 @@ public class DocGraphics{
 //    
 //  }
   
-//  private void renderAHexagonCoordinateSystemAxis(double[] p0,double[] p1,String axisname,Graphics2D graphics){
+//   void renderAHexagonCoordinateSystemAxis(double[] p0,double[] p1,String axisname,Graphics2D graphics){
 //    Path2D path=new Path2D.Double();
 //    double d=GD.getDirection_PointPoint(p1[0],p1[1],p0[0],p0[1]);
 //    
@@ -359,7 +274,7 @@ public class DocGraphics{
    * render the coordinates as 4 numbers in a square
    * we gotta paint them onto their own image then paint the image, to get around the scale stuff
    */
-  private void renderPointCoors(KVertex v,int fontsize,Color color){
+   void renderPointCoors(KVertex v,int fontsize,Color color){
     DPoint p=v.getBasicPoint2D();
     AffineTransform graphicstransform=graphics.getTransform();
     double[] pt={p.x,p.y};
@@ -379,7 +294,7 @@ public class DocGraphics{
    * ################################
    */
   
-  DGUI ui;
+  private DGUI ui;
   
   private void initUI(){
     ui=new DGUI(this);
@@ -391,7 +306,7 @@ public class DocGraphics{
    * ################################
    */
   
-  private static final String EXPORTDIR="";
+//  private static final String EXPORTDIR="";
   
   void export(){
     
@@ -427,11 +342,10 @@ public class DocGraphics{
   BufferedImage image;
   Graphics2D graphics;
   
-  private void initImage(int width,int height,double scale,Color fill){
+  void initImage(int width,int height,double scale,Color fill){
     imagewidth=width;
     imageheight=height;
     imagescale=scale;
-    Container c=ui.getContentPane();
     image=new BufferedImage(imagewidth,imageheight,BufferedImage.TYPE_INT_ARGB);
     graphics=image.createGraphics();
     graphics.setRenderingHints(RENDERING_HINTS);
@@ -445,19 +359,4 @@ public class DocGraphics{
     t.scale(imagescale,-imagescale);
     return t;}
   
-  /*
-   * ################################
-   * CONSTRUCTOR AND MAIN
-   * ################################
-   */
-  
-  DocGraphics(){
-    initUI();}
-  
-  public static final void main(String[] a){
-    DocGraphics dg=new DocGraphics();}
-  
-  
-  
-
 }

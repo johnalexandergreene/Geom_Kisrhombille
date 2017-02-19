@@ -29,11 +29,8 @@ public class DGUI extends JFrame{
   
   class KL0 extends KeyAdapter{
     public void keyTyped(KeyEvent e){
-      if(e.getKeyChar()=='g')dg.generate();
-      if(e.getKeyChar()=='e')dg.export();
-    }
-    
-  }
+      if(e.getKeyChar()=='r')dg.regenerate();
+      if(e.getKeyChar()=='e')dg.export();}}
   
   /*
    * ################################
