@@ -19,6 +19,7 @@ import java.util.Random;
 import java.util.Set;
 
 import org.fleen.geom_2D.DPoint;
+import org.fleen.geom_2D.DPolygon;
 import org.fleen.geom_Kisrhombille.GK;
 import org.fleen.geom_Kisrhombille.KPolygon;
 import org.fleen.geom_Kisrhombille.KSeg;
@@ -75,24 +76,29 @@ abstract class DocGraphics{
     STROKETHICKNESS3=6f;
   
   static final double 
-    IMAGESCALE0=10,
+    IMAGESCALE0=4,
     IMAGESCALE1=20,
     IMAGESCALE2=30,
-    IMAGESCALE3=60;
+    IMAGESCALE3=60,
+    IMAGESCALE4=180;
   
   static final int 
-    //small
-    IMAGEWIDTH0=500,
-    IMAGEHEIGHT0=500,
-    //medium
-    IMAGEWIDTH1=800,
-    IMAGEHEIGHT1=400,
+    //small box
+    IMAGEWIDTH0=96,
+    IMAGEHEIGHT0=96,
+    //medium box
+    IMAGEWIDTH1=512,
+    IMAGEHEIGHT1=512,
     //full sheet
     IMAGEWIDTH2=1000,
     IMAGEHEIGHT2=2000,
     //lo rez diagram 
     IMAGEWIDTH3=1600,
-    IMAGEHEIGHT3=800;
+    IMAGEHEIGHT3=800,
+    //basic column-spanning diagram
+    IMAGEWIDTH4=768,
+    IMAGEHEIGHT4=256
+    ;
   
   static final int 
     INNEROUTERPOLYGONOFFSET0=48;
@@ -107,6 +113,12 @@ abstract class DocGraphics{
     ui.repaint();}
   
   abstract void doGraphics();
+  
+  /*
+   * ################################
+   * RENDERING UTIL
+   * ################################
+   */
   
   List<KSeg> getSegs(int count,int v0range,int lengthrange){
     List<KSeg> segs=new ArrayList<KSeg>();
@@ -125,12 +137,6 @@ abstract class DocGraphics{
           return true;}}
     return false;}
   
-  /*
-   * ################################
-   * RENDERING UTIL
-   * ################################
-   */
-  
   void renderPolygon(KPolygon polygon,double strokethickness,double dotspan,Color color){
     int s=polygon.size(),i1;
     KVertex p0,p1;
@@ -141,6 +147,31 @@ abstract class DocGraphics{
       renderPoint(p0,dotspan,color);
       p1=polygon.get(i1);
       strokeSeg(p0,p1,strokethickness,color);}}
+  
+  void strokePolygon(DPolygon polygon,double strokethickness,Color color){
+    Path2D path=new Path2D.Double();
+    int s=polygon.size();
+    DPoint p=polygon.get(0);
+    path.moveTo(p.x,p.y);
+    for(int i=1;i<s;i++){
+      p=polygon.get(i);
+      path.lineTo(p.x,p.y);}
+    path.closePath();
+    graphics.setStroke(createStroke(strokethickness));
+    graphics.setPaint(color);
+    graphics.draw(path); }
+  
+  void fillPolygon(DPolygon polygon,Color c){
+    Path2D path=new Path2D.Double();
+    int s=polygon.size();
+    DPoint p=polygon.get(0);
+    path.moveTo(p.x,p.y);
+    for(int i=1;i<s;i++){
+      p=polygon.get(i);
+      path.lineTo(p.x,p.y);}
+    path.closePath();
+    graphics.setPaint(c);
+    graphics.fill(path); }
   
   KVertex getRandomPoint(int range){
     Random r=new Random();
@@ -156,7 +187,7 @@ abstract class DocGraphics{
     int d=r.nextInt(6);
     return new KVertex(a,b,c,d);}
   
-  private KSeg getRandomSeg(int v0range,int lengthrange){
+  KSeg getRandomSeg(int v0range,int lengthrange){
     KVertex v0=getRandomPoint(v0range);
     int[] b=GK.getLiberties(v0.getDog());
     Random r=new Random();
@@ -166,14 +197,17 @@ abstract class DocGraphics{
     KVertex v1=GK.getVertex_Transitionswise(v0,dir,length);
     return new KSeg(v0,v1);}
   
-  private Stroke createStroke(double thickness){
+  Stroke createStroke(double thickness){
     Stroke s=new BasicStroke((float)(thickness/imagescale),BasicStroke.CAP_SQUARE,BasicStroke.JOIN_ROUND,0,null,0);
     return s;}
   
-  private void strokeSeg(KVertex v0,KVertex v1,double thickness,Color color){
+  void strokeSeg(KVertex v0,KVertex v1,double thickness,Color color){
     DPoint 
       p0=v0.getBasicPoint2D(),
       p1=v1.getBasicPoint2D();
+    strokeSeg(p0,p1,thickness,color);}
+  
+  void strokeSeg(DPoint p0,DPoint p1,double thickness,Color color){
     Path2D path=new Path2D.Double();
     path.moveTo(p0.x,p0.y);
     path.lineTo(p1.x,p1.y);
@@ -190,7 +224,7 @@ abstract class DocGraphics{
     renderSeg(s.getVertex0(),s.getVertex1(),strokethickness,dotspan,color);}
   
    void strokeClock(KVertex v,double thickness,Color color){
-    KVertex[] cp=getClockPoints(v);
+    KVertex[] cp=getClockKPoints(v);
     int j;
     for(int i=1;i<cp.length;i++){
       j=i+1;
@@ -205,24 +239,71 @@ abstract class DocGraphics{
    * returns all involved points
    */
    Set<KVertex> strokeGrid(int range,double thickness,Color color){
-    Set<KVertex> points=new HashSet<KVertex>();
-    boolean valid;
-    KVertex p;
-    for(int ant=-range;ant<range;ant++){
-      for(int bat=-range;bat<range;bat++){
-        for(int cat=-range;cat<range;cat++){
-          valid=(cat==bat-ant);
-          if(valid){
-            p=new KVertex(ant,bat,cat,0);
-            points.addAll(Arrays.asList(getClockPoints(p)));
-            strokeClock(p,thickness,color);}}}}
+     Set<KVertex> points=new HashSet<KVertex>();
+     Set<KVertex> v0s=getV0s(range);
+     for(KVertex p:v0s){
+       points.addAll(Arrays.asList(getClockKPoints(p)));
+       strokeClock(p,thickness,color);}
     return points;}
-  
+   
+   /*
+    * get all the v0s (centers of the clocks) out to a specified range
+    */
+   Set<KVertex> getV0s(int range){
+     Set<KVertex> points=new HashSet<KVertex>();
+     boolean valid;
+     KVertex p;
+     for(int ant=-range;ant<range;ant++){
+       for(int bat=-range;bat<range;bat++){
+         for(int cat=-range;cat<range;cat++){
+           valid=(cat==bat-ant);
+           if(valid){
+             p=new KVertex(ant,bat,cat,0);
+             points.add(p);}}}}
+     return points;}
+   
+   List<GridTriangle> getGridTriangles(int range){
+     List<GridTriangle> triangles=new ArrayList<GridTriangle>();
+     Set<KVertex> v0s=getV0s(range);
+     KVertex[] cp;
+     for(KVertex p:v0s){
+       cp=getClockKPoints(p);
+       triangles.add(new GridTriangle(cp[0].getBasicPoint2D(),cp[1].getBasicPoint2D(),cp[2].getBasicPoint2D(),0));
+       triangles.add(new GridTriangle(cp[0].getBasicPoint2D(),cp[2].getBasicPoint2D(),cp[3].getBasicPoint2D(),1));
+       triangles.add(new GridTriangle(cp[0].getBasicPoint2D(),cp[3].getBasicPoint2D(),cp[4].getBasicPoint2D(),2));
+       triangles.add(new GridTriangle(cp[0].getBasicPoint2D(),cp[4].getBasicPoint2D(),cp[5].getBasicPoint2D(),3));
+       triangles.add(new GridTriangle(cp[0].getBasicPoint2D(),cp[5].getBasicPoint2D(),cp[6].getBasicPoint2D(),4));
+       triangles.add(new GridTriangle(cp[0].getBasicPoint2D(),cp[6].getBasicPoint2D(),cp[7].getBasicPoint2D(),5));
+       triangles.add(new GridTriangle(cp[0].getBasicPoint2D(),cp[7].getBasicPoint2D(),cp[8].getBasicPoint2D(),6));
+       triangles.add(new GridTriangle(cp[0].getBasicPoint2D(),cp[8].getBasicPoint2D(),cp[9].getBasicPoint2D(),7));
+       triangles.add(new GridTriangle(cp[0].getBasicPoint2D(),cp[9].getBasicPoint2D(),cp[10].getBasicPoint2D(),8));
+       triangles.add(new GridTriangle(cp[0].getBasicPoint2D(),cp[10].getBasicPoint2D(),cp[11].getBasicPoint2D(),9));
+       triangles.add(new GridTriangle(cp[0].getBasicPoint2D(),cp[11].getBasicPoint2D(),cp[12].getBasicPoint2D(),10));
+       triangles.add(new GridTriangle(cp[0].getBasicPoint2D(),cp[12].getBasicPoint2D(),cp[1].getBasicPoint2D(),11));}
+     return triangles;}
+   
+   List<GridHexagon> getGridHexagons(int range){
+     List<GridHexagon> hexagons=new ArrayList<GridHexagon>();
+     Set<KVertex> v0s=getV0s(range);
+     KVertex[] cp;
+     for(KVertex p:v0s){
+       cp=getClockKPoints(p);
+       hexagons.add(
+         new GridHexagon(
+           cp[1].getBasicPoint2D(),
+           cp[3].getBasicPoint2D(),
+           cp[5].getBasicPoint2D(),
+           cp[7].getBasicPoint2D(),
+           cp[9].getBasicPoint2D(),
+           cp[11].getBasicPoint2D(),
+           p));}
+     return hexagons;}
+   
   /*
    * 13 points
    * we treat v lke the center of a clock, disregard dog, branch from there.
    */
-   KVertex[] getClockPoints(KVertex v){
+   KVertex[] getClockKPoints(KVertex v){
     int a=v.getAnt(),b=v.getBat(),c=v.getCat();
     KVertex[] w={ 
       new KVertex(a,b,c,0),//center
@@ -242,10 +323,13 @@ abstract class DocGraphics{
   
    void renderPoint(KVertex v,double dotspan,Color color){
     DPoint p=v.getBasicPoint2D();
-    dotspan=dotspan/imagescale;
-    Ellipse2D dot=new Ellipse2D.Double(p.x-dotspan/2,p.y-dotspan/2,dotspan,dotspan);
-    graphics.setPaint(color);
-    graphics.fill(dot);}
+    renderPoint(p,dotspan,color);}
+   
+   void renderPoint(DPoint p,double dotspan,Color color){
+     dotspan=dotspan/imagescale;
+     Ellipse2D dot=new Ellipse2D.Double(p.x-dotspan/2,p.y-dotspan/2,dotspan,dotspan);
+     graphics.setPaint(color);
+     graphics.fill(dot);}
   
   
 //  void renderHexagonCoordinateSystemAxisArrows(Graphics2D graphics){
