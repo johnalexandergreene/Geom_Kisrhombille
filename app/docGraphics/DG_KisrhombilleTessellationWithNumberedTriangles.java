@@ -9,10 +9,6 @@ import java.util.List;
 import org.fleen.geom_2D.DPoint;
 import org.fleen.geom_2D.GD;
 
-/*
- * A few polygons on a grid
- * A little sample, to demonstrate the existence of kpolygons
- */
 public class DG_KisrhombilleTessellationWithNumberedTriangles extends DocGraphics{
   
   void doGraphics(){

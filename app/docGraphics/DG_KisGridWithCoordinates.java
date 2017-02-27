@@ -11,14 +11,14 @@ import org.fleen.geom_Kisrhombille.KVertex;
 /*
  * a kgrid with coordinates on the points
  */
-public class DG_GridWithCoordinates extends DocGraphics{
+public class DG_KisGridWithCoordinates extends DocGraphics{
   
   void doGraphics(){
     //do the grid
     initImage(IMAGEWIDTH5,IMAGEHEIGHT5,IMAGESCALE3,WHITE);
-    Set<KVertex> points=strokeGrid(8,STROKETHICKNESS2,GREY5);
+    Set<KVertex> points=strokeGrid(8,STROKETHICKNESS2,GREY6);
     for(KVertex p:points)
-      renderPoint(p,DOTSPAN2,GREY4);
+      renderPoint(p,DOTSPAN2,GREY6);
     for(KVertex p:points)
       renderPointCoors(p);}
   
@@ -37,6 +37,6 @@ public class DG_GridWithCoordinates extends DocGraphics{
     graphics.setTransform(graphicstransform);}
   
   public static final void main(String[] a){
-    new DG_GridWithCoordinates();}
+    new DG_KisGridWithCoordinates();}
 
 }

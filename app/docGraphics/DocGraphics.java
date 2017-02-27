@@ -97,8 +97,10 @@ abstract class DocGraphics{
     IMAGEHEIGHT3=800,
     //basic column-spanning diagram
     IMAGEWIDTH4=768,
-    IMAGEHEIGHT4=256
-    ;
+    IMAGEHEIGHT4=256,
+    //double tall column-spanning diagram
+    IMAGEWIDTH5=768,
+    IMAGEHEIGHT5=512;
   
   static final int 
     INNEROUTERPOLYGONOFFSET0=48;
@@ -168,6 +170,18 @@ abstract class DocGraphics{
     path.moveTo(p.x,p.y);
     for(int i=1;i<s;i++){
       p=polygon.get(i);
+      path.lineTo(p.x,p.y);}
+    path.closePath();
+    graphics.setPaint(c);
+    graphics.fill(path); }
+  
+  void fillPolygon(KPolygon polygon,Color c){
+    Path2D path=new Path2D.Double();
+    int s=polygon.size();
+    DPoint p=polygon.get(0).getBasicPoint2D();
+    path.moveTo(p.x,p.y);
+    for(int i=1;i<s;i++){
+      p=polygon.get(i).getBasicPoint2D();
       path.lineTo(p.x,p.y);}
     path.closePath();
     graphics.setPaint(c);
