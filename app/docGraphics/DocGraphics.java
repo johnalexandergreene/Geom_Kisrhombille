@@ -150,6 +150,10 @@ abstract class DocGraphics{
       p1=polygon.get(i1);
       strokeSeg(p0,p1,strokethickness,color);}}
   
+  void strokePolygon(KPolygon polygon,double strokethickness,Color color){
+    DPolygon p=polygon.getDefaultPolygon2D();
+    strokePolygon(p,strokethickness,color);}
+  
   void strokePolygon(DPolygon polygon,double strokethickness,Color color){
     Path2D path=new Path2D.Double();
     int s=polygon.size();
