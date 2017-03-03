@@ -1,0 +1,4 @@
+change names
+KVertex to KPoint
+KGrid.direction.forward to north
+  maybe put a getEast and getWest in there too
