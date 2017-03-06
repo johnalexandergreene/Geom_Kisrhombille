@@ -37,7 +37,6 @@ public class DG_KGridKPointAndCoors extends DocGraphics{
     graphics.drawString("bat = "+p.getBat(),(float)(pt[0]+xoff),(float)(pt[1]-50));
     graphics.drawString("cat = "+p.getCat(),(float)(pt[0]+xoff),(float)(pt[1]-25));
     graphics.drawString("dog = "+p.getDog(),(float)(pt[0]+xoff),(float)(pt[1]));
-    
     graphics.setTransform(graphicstransform);}
   
   public static final void main(String[] a){
