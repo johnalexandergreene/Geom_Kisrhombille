@@ -4,8 +4,10 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.fleen.geom_2D.DPoint;
@@ -29,46 +31,133 @@ public class DG_KGridDefinitionOnAPlaneWithParamsLabelled extends DocGraphics{
   //========
   //GRID #1
   
-  //========
-  //GRID #2
   private static final double 
-    originx=2,originy=3;
+    originx=0,originy=0;
   private static final double 
-    NORTH=GD.PI/8,
-    FISH=1.23;
+    NORTH=0,
+    FISH=1.0;
   private static final boolean
     TWIST=true;
   private static final double 
-    IMAGEXOFFSET=-3,
-    IMAGEYOFFSET=-3;
+    IMAGEXOFFSET=0,
+    IMAGEYOFFSET=0;
   private static final int 
-    CGRIDLABELSOFFSETXX=-32,
+    CGRIDLABELSOFFSETXX=-250,
     CGRIDLABELSOFFSETXY=12,
     CGRIDLABELSOFFSETYX=-12,
-    CGRIDLABELSOFFSETYY=40;
+    CGRIDLABELSOFFSETYY=220;
   private static final int 
     ORIGINLABELOFFSETX=-24,
     ORIGINLABELOFFSETY=26;
-  private static final 
-    String NORTHLABELTEXT="north=\u03c0/8";
-  private static final KVertex
-    FISHPOINT0=new KVertex(0,0,0,4),
-    FISHPOINT1=new KVertex(1,1,0,1);
   private static final int 
-    FISHLABELOFFSETX=18,
-    FISHLABELOFFSETY=20;
+    NORTHLABELOFFSETX=8,
+    NORTHLABELOFFSETY=20;
+  private static final 
+    String NORTHLABELTEXT="north=0";
+  private static final KVertex
+    FISHPOINT0=new KVertex(1,0,-1,3),
+    FISHPOINT1=new KVertex(1,0,-1,4);
+  private static final int 
+    FISHLABELOFFSETX=-37,
+    FISHLABELOFFSETY=40;
   private static final double 
     TWISTARCRADIUS=1.5,
     TWISTARCSTART=GD.PI*0.7,
-    TWISTARCEND=GD.PI*1.8;
+    TWISTARCEND=GD.PI*1.6;
   private static final String 
     TWISTLABELTEXT="twist=clockwise";
   private static final int
-    TWISTLABELOFFSETX=-120,
-    TWISTLABELOFFSETY=-19;
+    TWISTLABELOFFSETX=-160,
+    TWISTLABELOFFSETY=1;
+  private static final double 
+    NORTHSHAFTOFFSET=0.5;
+  
+  //========
+  //GRID #2
+//  private static final double 
+//    originx=2,originy=3;
+//  private static final double 
+//    NORTH=GD.PI/8,
+//    FISH=1.23;
+//  private static final boolean
+//    TWIST=true;
+//  private static final double 
+//    IMAGEXOFFSET=-3,
+//    IMAGEYOFFSET=-3;
+//  private static final int 
+//    CGRIDLABELSOFFSETXX=-32,
+//    CGRIDLABELSOFFSETXY=12,
+//    CGRIDLABELSOFFSETYX=-12,
+//    CGRIDLABELSOFFSETYY=40;
+//  private static final int 
+//    ORIGINLABELOFFSETX=-24,
+//    ORIGINLABELOFFSETY=26;
+//  private static final int 
+//    NORTHLABELOFFSETX=-2,
+//    NORTHLABELOFFSETY=35;
+//  private static final 
+//    String NORTHLABELTEXT="north=\u03c0/8";
+//  private static final KVertex
+//    FISHPOINT0=new KVertex(0,0,0,4),
+//    FISHPOINT1=new KVertex(1,1,0,1);
+//  private static final int 
+//    FISHLABELOFFSETX=18,
+//    FISHLABELOFFSETY=20;
+//  private static final double 
+//    TWISTARCRADIUS=1.5,
+//    TWISTARCSTART=GD.PI*0.7,
+//    TWISTARCEND=GD.PI*1.8;
+//  private static final String 
+//    TWISTLABELTEXT="twist=clockwise";
+//  private static final int
+//    TWISTLABELOFFSETX=-120,
+//    TWISTLABELOFFSETY=-19;
+//  private static final double 
+//  NORTHSHAFTOFFSET=0.5;
   
   //========
   //GRID #3
+  
+//  private static final double 
+//    originx=4,originy=-3;
+//  private static final double 
+//    NORTH=7*GD.PI/4,
+//    FISH=1.7;
+//  private static final boolean
+//    TWIST=false;
+//  private static final double 
+//    IMAGEXOFFSET=-3.5,
+//    IMAGEYOFFSET=3;
+//  private static final int 
+//    CGRIDLABELSOFFSETXX=40,
+//    CGRIDLABELSOFFSETXY=12,
+//    CGRIDLABELSOFFSETYX=-12,
+//    CGRIDLABELSOFFSETYY=44;
+//  private static final int 
+//    ORIGINLABELOFFSETX=-144,
+//    ORIGINLABELOFFSETY=26;
+//  private static final int 
+//    NORTHLABELOFFSETX=-122,
+//    NORTHLABELOFFSETY=-32;
+//  private static final 
+//    String NORTHLABELTEXT="north=7\u03c0/4";
+//  private static final KVertex
+//    FISHPOINT0=new KVertex(0,0,0,5),
+//    FISHPOINT1=new KVertex(1,0,-1,2);
+//  private static final int 
+//    FISHLABELOFFSETX=-55,
+//    FISHLABELOFFSETY=40;
+//  private static final double 
+//    TWISTARCRADIUS=1.5,
+//    TWISTARCSTART=GD.PI*2.1,
+//    TWISTARCEND=GD.PI*1.1;
+//  private static final String 
+//    TWISTLABELTEXT="twist=counterclockwise";
+//  private static final int
+//    TWISTLABELOFFSETX=-52,
+//    TWISTLABELOFFSETY=-22;
+//  private static final double 
+//    NORTHSHAFTOFFSET=0.5;
   
   /*
    * ################################
@@ -76,9 +165,8 @@ public class DG_KGridDefinitionOnAPlaneWithParamsLabelled extends DocGraphics{
    * ################################
    */
   
-  //arrowhead
+  //arrow
   private static final double
-    SHAFTOFFSET=1,
     SHAFTLENGTH=0.6,
     HEADLENGTH=0.5,
     HEADSPAN=0.25;
@@ -107,7 +195,7 @@ public class DG_KGridDefinitionOnAPlaneWithParamsLabelled extends DocGraphics{
    */
   
   private void renderCGrid(){
-    graphics.setStroke(createStroke(STROKETHICKNESS0));
+    graphics.setStroke(createStroke(STROKETHICKNESS1));
     graphics.setPaint(YELLOW);
     graphics.drawLine(-100,0,100,0);
     graphics.drawLine(0,-100,0,100);
@@ -225,20 +313,26 @@ public class DG_KGridDefinitionOnAPlaneWithParamsLabelled extends DocGraphics{
     double arclength=Math.abs(GD.getAngle_2Directions(start,end));
     int segcount=(int)(arclength/SEGARCINCREMENT)+1;
     double d=start;
-    double[] p=GD.getPoint_PointDirectionInterval(center.x,center.y,d,radius),pprior=null;
+    double[] p=GD.getPoint_PointDirectionInterval(center.x,center.y,d,radius);
+    List<DPoint> points=new ArrayList<DPoint>();
+    points.add(new DPoint(p));
     path.moveTo(p[0],p[1]);
     for(int i=0;i<segcount;i++){
       d=GD.normalizeDirection(d+SEGARCINCREMENT);
-      pprior=p;
       p=GD.getPoint_PointDirectionInterval(center.x,center.y,d,radius);
+      points.add(new DPoint(p));
       path.lineTo(p[0],p[1]);}
     //
     graphics.setPaint(PURPLE);
     graphics.setStroke(createStroke(STROKETHICKNESS2));
     graphics.draw(path);
     //
-    dend=GD.getDirection_PointPoint(pprior[0],pprior[1],p[0],p[1]);
-    pend=new DPoint(p);}
+    if(TWIST){
+      pend=points.get(points.size()-1);
+      dend=points.get(points.size()-2).getDirection(pend);
+    }else{
+      pend=points.get(0);
+      dend=points.get(1).getDirection(pend);}}
   
   private void renderTwistArcArrowhead(){ 
     double
@@ -296,7 +390,7 @@ public class DG_KGridDefinitionOnAPlaneWithParamsLabelled extends DocGraphics{
       p1d=new DPoint(grid.getPoint2D(p1));
     double dir=p0d.getDirection(p1d);
     DPoint 
-      a0=p0d.getPoint(dir,SHAFTOFFSET),
+      a0=p0d.getPoint(dir,NORTHSHAFTOFFSET),
       a1=a0.getPoint(dir,SHAFTLENGTH);
     renderNorthArrow(a0,a1);
     renderNorthLabel(a1);}
@@ -326,7 +420,7 @@ public class DG_KGridDefinitionOnAPlaneWithParamsLabelled extends DocGraphics{
     graphics.setTransform(new AffineTransform());
     graphics.setPaint(BLUE);
     graphics.setFont(new Font("Sans",Font.PLAIN,18));
-    graphics.drawString(NORTHLABELTEXT,(float)(pt[0]-2),(float)(pt[1]+35));
+    graphics.drawString(NORTHLABELTEXT,(float)(pt[0]+NORTHLABELOFFSETX),(float)(pt[1]+NORTHLABELOFFSETY));
     graphics.setTransform(graphicstransform);}
   
   /*
