@@ -86,14 +86,15 @@ Value for dog is in range \[0,5\].
       twist
     }
     
-3 examples of KGrid
-![class kgrid example 1](pix/classkgridexample1.png) ![class kgrid example 1](pix/classkgridexample2.png) ![class kgrid example 1](pix/classkgridexample3.png)
+| 2 examples of KGrid | |
+| --- | --- |
+| ![class kgrid example 1](pix/classkgridexample2.png) | ![class kgrid example 1](pix/classkgridexample3.png) |
     
 A KGrid is an instance of our coordinate system defined in terms of the plane. It shares its name with the geometry system that it implements. 
 **origin** is a 2d point. It specifies the location of KPoint(0,0,0,0).
 **north** is a floating point value describing a direction. It's the direction from KPoint(0,0,0,0) to KPoint(0,0,0,2).
 **fish** is a floating point value. It is our unit interval. The shortest side of our unit triangle. 
-**twist** is a value denoting chirality. Clockwise or counterclockwise. Probably boolean. It gives us the direction of east and west relative to north. +PI/2 or - PI/2. It's also the direction that we go when traversing the perimenter of that hexagon-based figure that we use for **dog** (see above).
+**twist** is a value denoting chirality. Clockwise or counterclockwise. Probably boolean. It gives us the direction of east and west relative to north. It's also the direction that we go when traversing the perimenter of that hexagon-based figure that we use for **dog** (see above).
 
 ###KSeg
 
@@ -122,7 +123,7 @@ A polygon.
 
 Recall that we define a **KGrid** using 4 params : origin, forward, fish and twist (see above).
 
-We can use a KPolygon to get those params. We can derive **origin** from V0, **north** from dir(V0,V1), **fish** from dis(V0,V1) and **twist** from the direction of the point sequence. ([2]())
+We can use a KPolygon to get those params. We can derive **origin** from V0, **north** from dir(V0,V1), **fish** from dis(V0,V1) and **twist** from the chirality of the point sequence. ([2]())
 
 
 

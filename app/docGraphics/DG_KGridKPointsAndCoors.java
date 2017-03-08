@@ -9,7 +9,7 @@ import org.fleen.geom_2D.DPoint;
 import org.fleen.geom_2D.GD;
 import org.fleen.geom_Kisrhombille.KVertex;
 
-public class DG_KGridKPointAndCoors extends DocGraphics{
+public class DG_KGridKPointsAndCoors extends DocGraphics{
   
   void doGraphics(){
     //do the grid
@@ -40,6 +40,6 @@ public class DG_KGridKPointAndCoors extends DocGraphics{
     graphics.setTransform(graphicstransform);}
   
   public static final void main(String[] a){
-    new DG_KGridKPointAndCoors();}
+    new DG_KGridKPointsAndCoors();}
 
 }
