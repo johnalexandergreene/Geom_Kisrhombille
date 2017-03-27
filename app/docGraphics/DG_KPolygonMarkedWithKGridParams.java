@@ -10,7 +10,7 @@ import org.fleen.geom_2D.DPoint;
 import org.fleen.geom_2D.DPolygon;
 import org.fleen.geom_2D.DVector;
 import org.fleen.geom_Kisrhombille.KPolygon;
-import org.fleen.geom_Kisrhombille.KVertex;
+import org.fleen.geom_Kisrhombille.KPoint;
 
 public class DG_KPolygonMarkedWithKGridParams extends DocGraphics{
 
@@ -18,12 +18,12 @@ public class DG_KPolygonMarkedWithKGridParams extends DocGraphics{
     initImage(IMAGEWIDTH3,IMAGEHEIGHT3,IMAGESCALE3,WHITE);
 //    strokeGrid(8,STROKETHICKNESS1,GREY6);
     
-    Set<KVertex> points=strokeGrid(8,STROKETHICKNESS1,GREY6);
+    Set<KPoint> points=strokeGrid(8,STROKETHICKNESS1,GREY6);
 //    for(KVertex p:points)
 //      renderPointCoors(p,10,RED);
     
     //render a triangle, T and hexagon
-    KPolygon ptriangle=new KPolygon(new KVertex(-3,-4,-1,0),new KVertex(-3,-2,1,0),new KVertex(-1,-2,-1,0));
+    KPolygon ptriangle=new KPolygon(new KPoint(-3,-4,-1,0),new KPoint(-3,-2,1,0),new KPoint(-1,-2,-1,0));
     renderPolygonWithKGridParamMarks(ptriangle,STROKETHICKNESS3,DOTSPAN2,GREEN);
     
     

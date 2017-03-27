@@ -2,7 +2,7 @@ package org.fleen.geom_Kisrhombille.graph;
 
 import org.fleen.geom_2D.DPoint;
 import org.fleen.geom_2D.GD;
-import org.fleen.geom_Kisrhombille.KVertex;
+import org.fleen.geom_Kisrhombille.KPoint;
 
 
 /*
@@ -49,7 +49,7 @@ public class GEdge{
     v0.edges.remove(this);
     v1.edges.remove(this);}
   
-  public boolean crosses(KVertex v){
+  public boolean crosses(KPoint v){
     DPoint
       pv0=v0.kvertex.getBasicPoint2D(),
       pv1=v1.kvertex.getBasicPoint2D(),

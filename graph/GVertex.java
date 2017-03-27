@@ -3,7 +3,7 @@ package org.fleen.geom_Kisrhombille.graph;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.fleen.geom_Kisrhombille.KVertex;
+import org.fleen.geom_Kisrhombille.KPoint;
 
 /*
  * a vertex in the graph
@@ -17,7 +17,7 @@ public class GVertex{
    * ################################
    */
   
-  public GVertex(KVertex kvertex){
+  public GVertex(KPoint kvertex){
     this.kvertex=kvertex;}
   
   /*
@@ -26,7 +26,7 @@ public class GVertex{
    * ################################
    */
   
-  public KVertex kvertex;
+  public KPoint kvertex;
   public List<GEdge> edges=new ArrayList<GEdge>(12);//12 is max edges in gkis geom
   
   //if all of this vertex's edges are closed 

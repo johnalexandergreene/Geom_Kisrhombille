@@ -2,7 +2,7 @@ package org.fleen.geom_Kisrhombille.app.docGraphics;
 
 import org.fleen.geom_2D.DPoint;
 import org.fleen.geom_2D.DPolygon;
-import org.fleen.geom_Kisrhombille.KVertex;
+import org.fleen.geom_Kisrhombille.KPoint;
 
 @SuppressWarnings("serial")
 public class GridTriangle extends DPolygon{

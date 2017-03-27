@@ -210,7 +210,7 @@ public class GK{
   /*
    * returns null if the specified vertex has no such adjacent in the specified direction
    */
-  public static final KVertex getVertex_Adjacent(KVertex v,int dir){
+  public static final KPoint getVertex_Adjacent(KPoint v,int dir){
     int[] v1=new int[4];
     getVertex_Adjacent(
       v.coors[0],
@@ -220,7 +220,7 @@ public class GK{
       dir,
       v1);
     if(v1[3]==VERTEX_NULL)return null;
-    return new KVertex(v1);}
+    return new KPoint(v1);}
   
   /*
    * Given the specified vertex (v0a,v0b,v0c,v0d) and a direction (dir), return
@@ -670,7 +670,7 @@ public class GK{
         return i;}
     return DIRECTION_NULL;}
   
-  public static final int getDirection_VertexVertex(KVertex v0,KVertex v1){
+  public static final int getDirection_VertexVertex(KPoint v0,KPoint v1){
     return getDirection_VertexVertex(
       v0.getAnt(),v0.getBat(),v0.getCat(),v0.getDog(),
       v1.getAnt(),v1.getBat(),v1.getCat(),v1.getDog());}
@@ -703,7 +703,7 @@ public class GK{
    */
   
   public static final double getDistance_VertexVertex(
-    KVertex v0,KVertex v1){
+    KPoint v0,KPoint v1){
     return getDistance_VertexVertex(
       v0.getAnt(),v0.getBat(),v0.getCat(),v0.getDog(),
       v1.getAnt(),v1.getBat(),v1.getCat(),v1.getDog());}
@@ -745,11 +745,11 @@ public class GK{
     GETVERTEXVV_TRAVERSALERRORCEILING=1.0/65536.0,
     GETVERTEXVV_TRAVERSALERRORFLOOR=-GETVERTEXVV_TRAVERSALERRORCEILING; 
   
-  public static final KVertex getVertex_VertexVector(KVertex v,KVector t){
+  public static final KPoint getVertex_VertexVector(KPoint v,KVector t){
     int[] v1=new int[4];
     getVertex_VertexVector(v.getAnt(),v.getBat(),v.getCat(),v.getDog(),t.direction,t.distance,v1);
     if(v1[3]==VERTEX_NULL)return null;
-    KVertex vertex=new KVertex(v1);
+    KPoint vertex=new KPoint(v1);
     return vertex;}
   
   public static final int[] getVertex_VertexVector(int[] v0,int tdir,double tdis){
@@ -1272,10 +1272,10 @@ public class GK{
     default:
       return;}}
   
-  public static final KVertex getVertex_Transitionswise(KVertex v0,int dir,int transitions){
+  public static final KPoint getVertex_Transitionswise(KPoint v0,int dir,int transitions){
     int[] a=new int[4];
     getVertex_Transitionswise(v0.getAnt(),v0.getBat(),v0.getCat(),v0.getDog(),dir,transitions,a);
-    return new KVertex(a);}
+    return new KPoint(a);}
   
   /*
    * ################################
@@ -1292,10 +1292,10 @@ public class GK{
     GRIDCELLBOXWIDTH=Math.sqrt(3.0),
     GRIDCELLBOXHEIGHT=3.0;
   
-  public static final KVertex getStandardVertex(double[] p,double margin){
+  public static final KPoint getStandardVertex(double[] p,double margin){
     return getStandardVertex(p[0],p[1],margin);}
   
-  public static final KVertex getStandardVertex(double px,double py,double margin){
+  public static final KPoint getStandardVertex(double px,double py,double margin){
     //get the box coordinates
     int 
       bx=(int)Math.floor(px/GRIDCELLBOXWIDTH),
@@ -1395,7 +1395,7 @@ public class GK{
           return null;}}}
       //now we have our most likely suspect
       //are we close enough?
-      KVertex v=new KVertex(ka,kb,kc,kd);
+      KPoint v=new KPoint(ka,kb,kc,kd);
       double[] precisepoint=v.getBasicPointCoor();
       if(Math.abs(px-precisepoint[0])<margin&&Math.abs(py-precisepoint[1])<margin){
         return v;
@@ -1422,7 +1422,7 @@ public class GK{
    *  v0     o
    * 
    */
-  public static final int getRightAngle(KVertex v0,KVertex v1,KVertex v2){
+  public static final int getRightAngle(KPoint v0,KPoint v1,KPoint v2){
     int 
       d0=getDirection_VertexVertex(v0,v1),
       d1=getDirection_VertexVertex(v1,v2);
@@ -1443,7 +1443,7 @@ public class GK{
    *               o  v0  
    * 
    */
-  public static final int getLeftAngle(KVertex v0,KVertex v1,KVertex v2){
+  public static final int getLeftAngle(KPoint v0,KPoint v1,KPoint v2){
     int 
     d0=getDirection_VertexVertex(v0,v1),
     d1=getDirection_VertexVertex(v1,v2);
@@ -1610,7 +1610,7 @@ public class GK{
   private static final List<KAnchor> getProspectiveAnchorsForMAA(KPolygon p){
     List<KAnchor> anchors=new ArrayList<KAnchor>();
     int i0,i1,s=p.size();
-    KVertex v0,v1;
+    KPoint v0,v1;
     for(i0=0;i0<s;i0++){
       i1=i0+1;
       if(i1==s)i1=0;

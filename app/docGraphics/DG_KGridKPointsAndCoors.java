@@ -7,23 +7,23 @@ import java.util.Set;
 
 import org.fleen.geom_2D.DPoint;
 import org.fleen.geom_2D.GD;
-import org.fleen.geom_Kisrhombille.KVertex;
+import org.fleen.geom_Kisrhombille.KPoint;
 
 public class DG_KGridKPointsAndCoors extends DocGraphics{
   
   void doGraphics(){
     //do the grid
     initImage(IMAGEWIDTH4,IMAGEHEIGHT4,IMAGESCALE2,WHITE);
-    Set<KVertex> points=strokeGrid(8,STROKETHICKNESS2,GREY6);
-    for(KVertex p:points)
+    Set<KPoint> points=strokeGrid(8,STROKETHICKNESS2,GREY6);
+    for(KPoint p:points)
       renderPoint(p,DOTSPAN1,GREY6);
     //
-    renderPoint(new KVertex(-3,-4,-1,5));
-    renderPoint(new KVertex(-1,-2,-1,4));
-    renderPoint(new KVertex(1,1,0,0));
+    renderPoint(new KPoint(-3,-4,-1,5));
+    renderPoint(new KPoint(-1,-2,-1,4));
+    renderPoint(new KPoint(1,1,0,0));
     }
   
-  private void renderPoint(KVertex p){
+  private void renderPoint(KPoint p){
     renderPoint(p,DOTSPAN2,GREEN);
     DPoint dp=p.getBasicPoint2D();
     AffineTransform graphicstransform=graphics.getTransform();

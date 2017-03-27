@@ -91,19 +91,19 @@ public class KCell{
   /*
    * returns this cells 3 vertices in order : v12,v6,v4
    */
-  public KVertex[] getVertices(){
-    KVertex p0=new KVertex(ant,bat,cat,0);
-    KVertex p1=new KVertex(
+  public KPoint[] getVertices(){
+    KPoint p0=new KPoint(ant,bat,cat,0);
+    KPoint p1=new KPoint(
       ant+DVERTEX_OFFSETS[dog][0][0],
       bat+DVERTEX_OFFSETS[dog][0][1],
       cat+DVERTEX_OFFSETS[dog][0][2],
       DVERTEX_OFFSETS[dog][0][3]);
-    KVertex p2=new KVertex(
+    KPoint p2=new KPoint(
       ant+DVERTEX_OFFSETS[dog][1][0],
       bat+DVERTEX_OFFSETS[dog][1][1],
       cat+DVERTEX_OFFSETS[dog][1][2],
       DVERTEX_OFFSETS[dog][1][3]);
-    return new KVertex[]{p0,p1,p2};}
+    return new KPoint[]{p0,p1,p2};}
   
   /*
    * ################################
@@ -236,7 +236,7 @@ public class KCell{
    */
   
   public Path2D.Double getPath2D(){
-    KVertex[] v=getVertices();
+    KPoint[] v=getVertices();
     double[] p0=v[0].getBasicPointCoor(),p1=v[1].getBasicPointCoor(),p2=v[2].getBasicPointCoor();
     Path2D.Double path=new Path2D.Double();
     path.moveTo(p0[0],p0[1]);
@@ -283,15 +283,15 @@ public class KCell{
     if((mrxc==0&&mryc==0)||(mrxc!=0&&mryc!=0)){
       int ant=(mrx-mry)/2;
       int cat=mry;
-      int bat=KVertex.getBat(ant,cat);
-      KVertex dpr=new KVertex(ant,bat,cat,0);
+      int bat=KPoint.getBat(ant,cat);
+      KPoint dpr=new KPoint(ant,bat,cat,0);
       cell=getCell_RectA(x,y,dpr);
     //MIN RECT TYPE B if one is odd and the other is even
     }else{//px%2!=py%2
       int ant=(mrx-mry+1)/2;
       int cat=mry;
-      int bat=KVertex.getBat(ant,cat);
-      KVertex dpr=new KVertex(ant,bat,cat,0);
+      int bat=KPoint.getBat(ant,cat);
+      KPoint dpr=new KPoint(ant,bat,cat,0);
       cell=getCell_RectB(x,y,dpr);}
     return cell;}
   
@@ -299,7 +299,7 @@ public class KCell{
    * get cell in rectangle type A specified by lower-left corner point dpr that contains the point (px,py)    
    * TODO use DGeom interval constants instead of literal values       
    */
-  private static final KCell getCell_RectA(double px,double py,KVertex dpr){
+  private static final KCell getCell_RectA(double px,double py,KPoint dpr){
     KCell cell;
     double[] pr=dpr.getBasicPointCoor();
     //get our 7 test points
@@ -344,7 +344,7 @@ public class KCell{
    * get cell in rectangle type B specified by lower-right corner point dpr that contains the point (px,py)    
    * TODO use DGeom interval constants instead of literal values       
    */
-  private static final KCell getCell_RectB(double px,double py,KVertex dpr){
+  private static final KCell getCell_RectB(double px,double py,KPoint dpr){
     KCell cell;
     double[] pr=dpr.getBasicPointCoor();
     //get our 7 test points

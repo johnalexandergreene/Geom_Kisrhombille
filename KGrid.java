@@ -27,16 +27,16 @@ public class KGrid implements Serializable{
    * ################################
    */
   
-  public KGrid(double originx,double originy,double foreward,boolean twist,double fish){
+  public KGrid(double originx,double originy,double north,boolean twist,double fish){
     this(
       new double[]{originx,originy},
-      foreward,
+      north,
       twist,
       fish);}
   
-  public KGrid(double[] origin,double foreward,boolean twist,double fish){
+  public KGrid(double[] origin,double north,boolean twist,double fish){
     this.origin=origin;
-    this.foreward=foreward;
+    this.north=north;
     this.twist=twist;
     this.fish=fish;}
   
@@ -72,7 +72,7 @@ public class KGrid implements Serializable{
   //the origin for our k grid in 2d geom terms
   private double[] origin=null;
   //foreward (direction==0) for our k grid in 2d geom terms
-  private double foreward;
+  private double north;
   //we have 2 mirroring possibilities here
   //true means positive twist : direction indices go clockwise
   //false means negative twist : direction indices go counterclockwise
@@ -84,8 +84,8 @@ public class KGrid implements Serializable{
   public double[] getOrigin(){
     return origin;}
   
-  public double getForeward(){
-    return foreward;}
+  public double getNorth(){
+    return north;}
   
   public boolean getTwist(){
     return twist;}
@@ -99,7 +99,7 @@ public class KGrid implements Serializable{
    * ################################
    */
   
-  public double[] getPoint2D(KVertex v){
+  public double[] getPoint2D(KPoint v){
     return getPoint2D(v.getAnt(),v.getBat(),v.getCat(),v.getDog());}
     
   public double[] getPoint2D(int ant,int bat,int cat,int dog){
@@ -113,9 +113,9 @@ public class KGrid implements Serializable{
     pv12dis*=fish;
     //adjust direction for foreward according to twist
     if(twist==GK.TWIST_POSITIVE){
-      pv12dir=GD.normalizeDirection(foreward+pv12dir);
+      pv12dir=GD.normalizeDirection(north+pv12dir);
     }else{
-      pv12dir=GD.normalizeDirection(foreward-pv12dir);}
+      pv12dir=GD.normalizeDirection(north-pv12dir);}
     //now we have the point in a form offset (p12dir,p12dis) from the hypothetical origin
     //get the actual v12 point
     pv12=GD.getPoint_PointDirectionInterval(origin[0],origin[1],pv12dir,pv12dis);
@@ -143,9 +143,9 @@ public class KGrid implements Serializable{
       throw new IllegalArgumentException("invalid dog : "+dog);}
     dis0*=fish;
     if(twist==GK.TWIST_POSITIVE){
-      dir0=GD.normalizeDirection(foreward+dir0);
+      dir0=GD.normalizeDirection(north+dir0);
     }else{
-      dir0=GD.normalizeDirection(foreward-dir0);}
+      dir0=GD.normalizeDirection(north-dir0);}
     double[] pv=GD.getPoint_PointDirectionInterval(pv12[0],pv12[1],dir0,dis0);
     return pv;}
   
@@ -153,7 +153,7 @@ public class KGrid implements Serializable{
    * given a kgrid direction on this grid, return it's 2d direction 
    */
   public double getDirection2D(int kdir){
-    double d=foreward;
+    double d=north;
     if(twist)
       d=GD.normalizeDirection(d+kdir*DIRECTION12UNIT);
     else
@@ -187,7 +187,7 @@ public class KGrid implements Serializable{
    * get closest vertex in v12's local group to p. That's our vertex.
    * TODO optimize
    */
-  public KVertex getKVertex(double[] point){
+  public KPoint getKVertex(double[] point){
     //get the point's sector
     double pointdir=GD.getDirection_PointPoint(origin[0],origin[1],point[0],point[1]);
     int pointsector=getKVertex_GetSector(pointdir);
@@ -219,22 +219,22 @@ public class KGrid implements Serializable{
       ant+=(a+1)/2;
       bat+=(a+1)/2;}
     //now we have a close vertex
-    KVertex close=new KVertex(ant,bat,cat,dog);
+    KPoint close=new KPoint(ant,bat,cat,dog);
     //get the group of vertices near it
-    List<KVertex> closegroup=getKVertex_GetGroup(close);
+    List<KPoint> closegroup=getKVertex_GetGroup(close);
     //get the closest vertex
-    KVertex closest=getKVertex_GetClosestVertex(point,closegroup);
+    KPoint closest=getKVertex_GetClosestVertex(point,closegroup);
     return closest;}
   
   /*
    * Given a point and a list of vertices, return the closest vertex in the list to that point 
    * TODO optimize, generalize
    */
-  private KVertex getKVertex_GetClosestVertex(double[] point,List<KVertex> vertices){
+  private KPoint getKVertex_GetClosestVertex(double[] point,List<KPoint> vertices){
     double testdist,closestdist=Double.MAX_VALUE;
-    KVertex closest=null;
+    KPoint closest=null;
     double[] testpoint;
-    for(KVertex v:vertices){
+    for(KPoint v:vertices){
       testpoint=getPoint2D(v);
       testdist=GD.getDistance_PointPoint(point[0],point[1],testpoint[0],testpoint[1]);
       if(testdist<closestdist){
@@ -242,23 +242,23 @@ public class KGrid implements Serializable{
         closest=v;}}
     return closest;}
   
-  private List<KVertex> getKVertex_GetGroup(KVertex c){
-    List<KVertex> a=new ArrayList<KVertex>();
+  private List<KPoint> getKVertex_GetGroup(KPoint c){
+    List<KPoint> a=new ArrayList<KPoint>();
     a.add(c);
     int[] b=c.coors;
     //if the corner is a v12
     if(c.getDog()==0){
-      a.addAll(KVertex.getV12LocalGroup(c));
+      a.addAll(KPoint.getV12LocalGroup(c));
     //otherwise it's a v4 
     }else{
-      a.add(new KVertex(b[0],b[1],b[2],0));
-      a.add(new KVertex(b[0],b[1],b[2],3));
-      a.add(new KVertex(b[0],b[1],b[2],4));
-      a.add(new KVertex(b[0]+1,b[1]+1,b[2],1));
-      a.add(new KVertex(b[0]+1,b[1]+1,b[2],0));
-      a.add(new KVertex(b[0]+1,b[1],b[2]-1,3));
-      a.add(new KVertex(b[0]+1,b[1],b[2]-1,2));
-      a.add(new KVertex(b[0]+1,b[1],b[2]-1,1));}
+      a.add(new KPoint(b[0],b[1],b[2],0));
+      a.add(new KPoint(b[0],b[1],b[2],3));
+      a.add(new KPoint(b[0],b[1],b[2],4));
+      a.add(new KPoint(b[0]+1,b[1]+1,b[2],1));
+      a.add(new KPoint(b[0]+1,b[1]+1,b[2],0));
+      a.add(new KPoint(b[0]+1,b[1],b[2]-1,3));
+      a.add(new KPoint(b[0]+1,b[1],b[2]-1,2));
+      a.add(new KPoint(b[0]+1,b[1],b[2]-1,1));}
     return a;}
   
   /*
@@ -282,15 +282,15 @@ public class KGrid implements Serializable{
   private int getKVertex_GetSector(double dir){
     double r;//relative direction
     if(twist){
-      if(dir>foreward){
-        r=dir-foreward;
+      if(dir>north){
+        r=dir-north;
       }else{
-        r=(GD.PI*2.0)-(foreward-dir);}  
+        r=(GD.PI*2.0)-(north-dir);}  
     }else{
-      if(dir<foreward){
-        r=dir-foreward;
+      if(dir<north){
+        r=dir-north;
       }else{
-        r=(GD.PI*2.0)-(foreward-dir);}}
+        r=(GD.PI*2.0)-(north-dir);}}
     if(r>=0&&r<GD.PI*0.5){
       return 0;
     }else if(r>=GD.PI*0.5&&r<GD.PI){
@@ -325,7 +325,7 @@ public class KGrid implements Serializable{
     System.out.println("KGRID TEST0");
     KGrid g=new KGrid(0,0,GD.PI/3.0,false,1.0);
     double[] point={4*GD.SQRT3,6};
-    KVertex v=g.getKVertex(point);
+    KPoint v=g.getKVertex(point);
     System.out.println("KGRID : "+g);
     System.out.println("POINT : ("+point[0]+","+point[1]+")");
     System.out.println("KVERTEX : "+v);

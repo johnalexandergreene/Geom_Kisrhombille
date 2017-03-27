@@ -7,7 +7,7 @@ import java.util.Map;
 
 import org.fleen.geom_2D.DPoint;
 import org.fleen.geom_Kisrhombille.KPolygon;
-import org.fleen.geom_Kisrhombille.KVertex;
+import org.fleen.geom_Kisrhombille.KPoint;
 
 /*
  * 1..n trees of connected graphs
@@ -148,7 +148,7 @@ class TreesOfConnectedGraphs{
    * encloses cg 
    */
   private boolean encloses(KPolygon polygon,ConnectedGraph cg){
-    KVertex v=cg.getVertices().iterator().next().kvertex;
+    KPoint v=cg.getVertices().iterator().next().kvertex;
     DPoint p=v.getBasicPoint2D();
     boolean c=polygon.getDefaultPolygon2D().containsPoint(p.x,p.y);
     return c;}

@@ -6,7 +6,7 @@ import java.awt.geom.AffineTransform;
 import java.util.Set;
 
 import org.fleen.geom_2D.DPoint;
-import org.fleen.geom_Kisrhombille.KVertex;
+import org.fleen.geom_Kisrhombille.KPoint;
 
 /*
  * a kgrid with coordinates on the points
@@ -16,13 +16,13 @@ public class DG_GridWithCoordinates extends DocGraphics{
   void doGraphics(){
     //do the grid
     initImage(IMAGEWIDTH5,IMAGEHEIGHT5,IMAGESCALE3,WHITE);
-    Set<KVertex> points=strokeGrid(8,STROKETHICKNESS2,GREY5);
-    for(KVertex p:points)
+    Set<KPoint> points=strokeGrid(8,STROKETHICKNESS2,GREY5);
+    for(KPoint p:points)
       renderPoint(p,DOTSPAN2,GREY4);
-    for(KVertex p:points)
+    for(KPoint p:points)
       renderPointCoors(p);}
   
-  void renderPointCoors(KVertex v){
+  void renderPointCoors(KPoint v){
     DPoint p=v.getBasicPoint2D();
     AffineTransform graphicstransform=graphics.getTransform();
     double[] pt={p.x,p.y};

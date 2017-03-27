@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.fleen.geom_Kisrhombille.KPolygon;
-import org.fleen.geom_Kisrhombille.KVertex;
+import org.fleen.geom_Kisrhombille.KPoint;
 
 /*
  * A graph where the vertices are kvertices
@@ -56,7 +56,7 @@ public class Graph{
   public Set<GVertex> vertices=new HashSet<GVertex>();
   public Set<GEdge> edges=new HashSet<GEdge>();
   
-  public boolean contains(KVertex v){
+  public boolean contains(KPoint v){
     for(GVertex gv:vertices)
       if(gv.kvertex.equals(v))
         return true;
@@ -65,7 +65,7 @@ public class Graph{
   /*
    * create a new gvertex and stick in the set
    */
-  public void addVertex(KVertex v){
+  public void addVertex(KPoint v){
     invalidateDisconnectedGraph();
     GVertex gv=new GVertex(v);
     vertices.add(gv);}
@@ -73,7 +73,7 @@ public class Graph{
   //remove the vertex and any connected edges
   //if there is no such gvertex associated with the specified, or
   //if the gvertex is immutable, then fail.
-  public void removeVertex(KVertex v){
+  public void removeVertex(KPoint v){
     invalidateDisconnectedGraph();
     GVertex gv=getGVertex(v);
     vertices.remove(gv);
@@ -86,7 +86,7 @@ public class Graph{
         i.remove();}}}
   
   //connect the specified vertices by creating an edge and setting references
-  public void connect(KVertex v0,KVertex v1){
+  public void connect(KPoint v0,KPoint v1){
     System.out.println("CONNECT V0 V1");
     invalidateDisconnectedGraph();
     GVertex 
@@ -100,7 +100,7 @@ public class Graph{
       gv0.edges.add(e);
       gv1.edges.add(e);}}
   
-  public void disconnect(KVertex v0,KVertex v1){
+  public void disconnect(KPoint v0,KPoint v1){
     GVertex 
       gv0=getGVertex(v0),
       gv1=getGVertex(v1);
@@ -114,7 +114,7 @@ public class Graph{
     edges.remove(e);}
   
   //get gvertex associated with the specified kvertex
-  public GVertex getGVertex(KVertex kv){
+  public GVertex getGVertex(KPoint kv){
     GVertex gv0=null;
     for(GVertex gv:vertices)
       if(gv.kvertex.equals(kv)){
@@ -127,7 +127,7 @@ public class Graph{
    * returns the edge that the specified vertex get crossed by
    * returns null if the vertex doesn't get crossed by any edge 
    */
-  public GEdge getCrossingEdge(KVertex v){
+  public GEdge getCrossingEdge(KPoint v){
     for(GEdge e:edges)
       if(e.crosses(v))
         return e;
@@ -135,9 +135,9 @@ public class Graph{
   
   public void addPolygon(KPolygon polygon){
     int s,i0,i1;
-    KVertex v0,v1;
+    KPoint v0,v1;
     s=polygon.size();
-    for(KVertex v:polygon)
+    for(KPoint v:polygon)
       addVertex(v);
     for(i0=0;i0<s;i0++){
       i1=i0+1;

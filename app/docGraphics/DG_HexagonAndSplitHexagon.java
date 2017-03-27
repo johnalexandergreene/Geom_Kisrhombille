@@ -2,7 +2,7 @@ package org.fleen.geom_Kisrhombille.app.docGraphics;
 
 import java.util.ArrayList;
 
-import org.fleen.geom_Kisrhombille.KVertex;
+import org.fleen.geom_Kisrhombille.KPoint;
 
 /*
  * a kgrid with coordinates on the points
@@ -12,8 +12,8 @@ public class DG_HexagonAndSplitHexagon extends DocGraphics{
   void doGraphics(){
     //do the grid
     initImage(192,192,IMAGESCALE2,WHITE);
-   KVertex v0=new ArrayList<KVertex>(getV0s(1)).get(0);
-   KVertex[] c=getClockKPoints(v0);
+   KPoint v0=new ArrayList<KPoint>(getV0s(1)).get(0);
+   KPoint[] c=getClockKPoints(v0);
    strokeSeg(c[1],c[3],STROKETHICKNESS2,GREEN);
    strokeSeg(c[3],c[5],STROKETHICKNESS2,GREEN);
    strokeSeg(c[5],c[7],STROKETHICKNESS2,GREEN);

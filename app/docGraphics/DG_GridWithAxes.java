@@ -5,7 +5,7 @@ import java.util.Set;
 
 import org.fleen.geom_2D.DPoint;
 import org.fleen.geom_2D.GD;
-import org.fleen.geom_Kisrhombille.KVertex;
+import org.fleen.geom_Kisrhombille.KPoint;
 
 /*
  * a kgrid with coordinates on the points
@@ -15,8 +15,8 @@ public class DG_GridWithAxes extends DocGraphics{
   void doGraphics(){
     //do the grid
     initImage(IMAGEWIDTH4,IMAGEHEIGHT4,IMAGESCALE2,WHITE);
-    Set<KVertex> points=strokeGrid(8,STROKETHICKNESS2,GREY6);
-    for(KVertex p:points)
+    Set<KPoint> points=strokeGrid(8,STROKETHICKNESS2,GREY6);
+    for(KPoint p:points)
       renderPoint(p,DOTSPAN1,GREY6);
     //
     renderAxesStar();}
@@ -27,7 +27,7 @@ public class DG_GridWithAxes extends DocGraphics{
     HEADSPAN=0.8;
   
   private void renderAxesStar(){
-    DPoint pc=new KVertex(0,0,0,0).getBasicPoint2D();
+    DPoint pc=new KPoint(0,0,0,0).getBasicPoint2D();
     double[] dir=new double[12];
     DPoint[] 
       pa=new DPoint[12];

@@ -23,7 +23,7 @@ import org.fleen.geom_2D.DPolygon;
 import org.fleen.geom_Kisrhombille.GK;
 import org.fleen.geom_Kisrhombille.KPolygon;
 import org.fleen.geom_Kisrhombille.KSeg;
-import org.fleen.geom_Kisrhombille.KVertex;
+import org.fleen.geom_Kisrhombille.KPoint;
 
 /*
  * create graphics for documentation
@@ -141,7 +141,7 @@ abstract class DocGraphics{
   
   void renderPolygon(KPolygon polygon,double strokethickness,double dotspan,Color color){
     int s=polygon.size(),i1;
-    KVertex p0,p1;
+    KPoint p0,p1;
     for(int i0=0;i0<s;i0++){
       i1=i0+1;
       if(i1==s)i1=0;
@@ -191,7 +191,7 @@ abstract class DocGraphics{
     graphics.setPaint(c);
     graphics.fill(path); }
   
-  KVertex getRandomPoint(int range){
+  KPoint getRandomPoint(int range){
     Random r=new Random();
     boolean valid=false;
     int a=0,b=0,c=0,count=0;
@@ -203,23 +203,23 @@ abstract class DocGraphics{
       c=r.nextInt(range*2)-range;
       valid=(c==b-a);}
     int d=r.nextInt(6);
-    return new KVertex(a,b,c,d);}
+    return new KPoint(a,b,c,d);}
   
   KSeg getRandomSeg(int v0range,int lengthrange){
-    KVertex v0=getRandomPoint(v0range);
+    KPoint v0=getRandomPoint(v0range);
     int[] b=GK.getLiberties(v0.getDog());
     Random r=new Random();
     int 
       dir=b[r.nextInt(b.length)],
       length=r.nextInt(lengthrange)+1;
-    KVertex v1=GK.getVertex_Transitionswise(v0,dir,length);
+    KPoint v1=GK.getVertex_Transitionswise(v0,dir,length);
     return new KSeg(v0,v1);}
   
   Stroke createStroke(double thickness){
     Stroke s=new BasicStroke((float)(thickness/imagescale),BasicStroke.CAP_SQUARE,BasicStroke.JOIN_ROUND,0,null,0);
     return s;}
   
-  void strokeSeg(KVertex v0,KVertex v1,double thickness,Color color){
+  void strokeSeg(KPoint v0,KPoint v1,double thickness,Color color){
     DPoint 
       p0=v0.getBasicPoint2D(),
       p1=v1.getBasicPoint2D();
@@ -233,7 +233,7 @@ abstract class DocGraphics{
     graphics.setPaint(color);
     graphics.draw(path);}
   
-   void renderSeg(KVertex v0,KVertex v1,double strokethickness,double dotspan,Color color){
+   void renderSeg(KPoint v0,KPoint v1,double strokethickness,double dotspan,Color color){
     strokeSeg(v0,v1,strokethickness,color);
     renderPoint(v0,dotspan,color);
     renderPoint(v1,dotspan,color);}
@@ -241,8 +241,8 @@ abstract class DocGraphics{
    void renderSeg(KSeg s,double strokethickness,double dotspan,Color color){
     renderSeg(s.getVertex0(),s.getVertex1(),strokethickness,dotspan,color);}
   
-   void strokeClock(KVertex v,double thickness,Color color){
-    KVertex[] cp=getClockKPoints(v);
+   void strokeClock(KPoint v,double thickness,Color color){
+    KPoint[] cp=getClockKPoints(v);
     int j;
     for(int i=1;i<cp.length;i++){
       j=i+1;
@@ -256,10 +256,10 @@ abstract class DocGraphics{
    * this is sloppy but brief
    * returns all involved points
    */
-   Set<KVertex> strokeGrid(int range,double thickness,Color color){
-     Set<KVertex> points=new HashSet<KVertex>();
-     Set<KVertex> v0s=getV0s(range);
-     for(KVertex p:v0s){
+   Set<KPoint> strokeGrid(int range,double thickness,Color color){
+     Set<KPoint> points=new HashSet<KPoint>();
+     Set<KPoint> v0s=getV0s(range);
+     for(KPoint p:v0s){
        points.addAll(Arrays.asList(getClockKPoints(p)));
        strokeClock(p,thickness,color);}
     return points;}
@@ -267,24 +267,24 @@ abstract class DocGraphics{
    /*
     * get all the v0s (centers of the clocks) out to a specified range
     */
-   Set<KVertex> getV0s(int range){
-     Set<KVertex> points=new HashSet<KVertex>();
+   Set<KPoint> getV0s(int range){
+     Set<KPoint> points=new HashSet<KPoint>();
      boolean valid;
-     KVertex p;
+     KPoint p;
      for(int ant=-range;ant<range;ant++){
        for(int bat=-range;bat<range;bat++){
          for(int cat=-range;cat<range;cat++){
            valid=(cat==bat-ant);
            if(valid){
-             p=new KVertex(ant,bat,cat,0);
+             p=new KPoint(ant,bat,cat,0);
              points.add(p);}}}}
      return points;}
    
    List<GridTriangle> getGridTriangles(int range){
      List<GridTriangle> triangles=new ArrayList<GridTriangle>();
-     Set<KVertex> v0s=getV0s(range);
-     KVertex[] cp;
-     for(KVertex p:v0s){
+     Set<KPoint> v0s=getV0s(range);
+     KPoint[] cp;
+     for(KPoint p:v0s){
        cp=getClockKPoints(p);
        triangles.add(new GridTriangle(cp[0].getBasicPoint2D(),cp[1].getBasicPoint2D(),cp[2].getBasicPoint2D(),0));
        triangles.add(new GridTriangle(cp[0].getBasicPoint2D(),cp[2].getBasicPoint2D(),cp[3].getBasicPoint2D(),1));
@@ -302,9 +302,9 @@ abstract class DocGraphics{
    
    List<GridHexagon> getGridHexagons(int range){
      List<GridHexagon> hexagons=new ArrayList<GridHexagon>();
-     Set<KVertex> v0s=getV0s(range);
-     KVertex[] cp;
-     for(KVertex p:v0s){
+     Set<KPoint> v0s=getV0s(range);
+     KPoint[] cp;
+     for(KPoint p:v0s){
        cp=getClockKPoints(p);
        hexagons.add(
          new GridHexagon(
@@ -321,25 +321,25 @@ abstract class DocGraphics{
    * 13 points
    * we treat v lke the center of a clock, disregard dog, branch from there.
    */
-   KVertex[] getClockKPoints(KVertex v){
+   KPoint[] getClockKPoints(KPoint v){
     int a=v.getAnt(),b=v.getBat(),c=v.getCat();
-    KVertex[] w={ 
-      new KVertex(a,b,c,0),//center
-      new KVertex(a,b,c,2),//north
-      new KVertex(a,b,c,3),//just cw of north
-      new KVertex(a,b,c,4),
-      new KVertex(a,b,c,5),
-      new KVertex(a+1,b,c-1,2),
-      new KVertex(a+1,b,c-1,1),
-      new KVertex(a,b-1,c-1,4),
-      new KVertex(a,b-1,c-1,3),
-      new KVertex(a,b-1,c-1,2),
-      new KVertex(a-1,b-1,c,5),
-      new KVertex(a-1,b-1,c,4),
-      new KVertex(a,b,c,1)};
+    KPoint[] w={ 
+      new KPoint(a,b,c,0),//center
+      new KPoint(a,b,c,2),//north
+      new KPoint(a,b,c,3),//just cw of north
+      new KPoint(a,b,c,4),
+      new KPoint(a,b,c,5),
+      new KPoint(a+1,b,c-1,2),
+      new KPoint(a+1,b,c-1,1),
+      new KPoint(a,b-1,c-1,4),
+      new KPoint(a,b-1,c-1,3),
+      new KPoint(a,b-1,c-1,2),
+      new KPoint(a-1,b-1,c,5),
+      new KPoint(a-1,b-1,c,4),
+      new KPoint(a,b,c,1)};
     return w;}
   
-   void renderPoint(KVertex v,double dotspan,Color color){
+   void renderPoint(KPoint v,double dotspan,Color color){
     DPoint p=v.getBasicPoint2D();
     renderPoint(p,dotspan,color);}
    
@@ -384,7 +384,7 @@ abstract class DocGraphics{
    * render the coordinates as 4 numbers in a square
    * we gotta paint them onto their own image then paint the image, to get around the scale stuff
    */
-   void renderPointCoors(KVertex v,int fontsize,Color color){
+   void renderPointCoors(KPoint v,int fontsize,Color color){
     DPoint p=v.getBasicPoint2D();
     AffineTransform graphicstransform=graphics.getTransform();
     double[] pt={p.x,p.y};

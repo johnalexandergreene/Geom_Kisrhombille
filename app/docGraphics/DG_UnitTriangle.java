@@ -7,7 +7,7 @@ import java.awt.geom.AffineTransform;
 import org.fleen.geom_2D.DPoint;
 import org.fleen.geom_2D.GD;
 import org.fleen.geom_Kisrhombille.KPolygon;
-import org.fleen.geom_Kisrhombille.KVertex;
+import org.fleen.geom_Kisrhombille.KPoint;
 
 /*
  * A few polygons on a grid
@@ -21,10 +21,10 @@ public class DG_UnitTriangle extends DocGraphics{
     t.translate(-1.3,0.45);
     t.rotate(-GD.PI/6);
     graphics.setTransform(t);
-    KVertex 
-      v0=new KVertex(0,0,0,0),
-      v1=new KVertex(0,0,0,4),
-      v2=new KVertex(0,0,0,5);
+    KPoint 
+      v0=new KPoint(0,0,0,0),
+      v1=new KPoint(0,0,0,4),
+      v2=new KPoint(0,0,0,5);
     KPolygon kp=new KPolygon(v0,v1,v2);
     renderPolygon(kp,STROKETHICKNESS3,DOTSPAN2,ORANGE);
     //

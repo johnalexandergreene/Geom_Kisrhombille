@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.fleen.geom_Kisrhombille.KPolygon;
-import org.fleen.geom_Kisrhombille.KVertex;
+import org.fleen.geom_Kisrhombille.KPoint;
 import org.fleen.geom_Kisrhombille.KYard;
 import org.fleen.util.tree.TreeNodeIterator;
 
@@ -71,8 +71,8 @@ public class DisconnectedGraph{
    * ################################
    */
   
-  public List<List<KVertex>> getOpenKVertexSequences(){
-    List<List<KVertex>> seq=new ArrayList<List<KVertex>>();
+  public List<List<KPoint>> getOpenKVertexSequences(){
+    List<List<KPoint>> seq=new ArrayList<List<KPoint>>();
     for(ConnectedGraph cg:connectedgraphs)
       seq.addAll(cg.getOpenKVertexSequences());
     return seq;}

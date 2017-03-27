@@ -13,7 +13,7 @@ import org.fleen.geom_2D.DPoint;
  * A vertex in a KGrid
  * 
  */
-public class KVertex implements Serializable{
+public class KPoint implements Serializable{
   
   private static final long serialVersionUID=5215014207521492571L;
 
@@ -29,16 +29,16 @@ public class KVertex implements Serializable{
    * dog for point relative to local t12
    * range [0,5]
    */
-  public KVertex(int ant,int bat,int cat,int dog){
+  public KPoint(int ant,int bat,int cat,int dog){
     coors=new int[]{ant,bat,cat,dog};}
   
-  public KVertex(int[] params){
+  public KPoint(int[] params){
     this.coors=params;}
   
-  public KVertex(KVertex v){
+  public KPoint(KPoint v){
     coors=new int[]{v.coors[0],v.coors[1],v.coors[2],v.coors[3]};}
   
-  public KVertex(){
+  public KPoint(){
     coors=new int[4];}
   
   /*
@@ -89,40 +89,40 @@ public class KVertex implements Serializable{
   
   //returns the direction from this vertex to v
   //returns DIRECTION_NULL if this vertex and v are not colinear
-  public int getDirection(KVertex v){
+  public int getDirection(KPoint v){
     return GK.getDirection_VertexVertex(this,v);}
   
-  public double getDistance(KVertex v){
+  public double getDistance(KPoint v){
     return GK.getDistance_VertexVertex(
       coors[0],coors[1],coors[2],coors[3],
       v.coors[0],v.coors[1],v.coors[2],v.coors[3]);}
   
-  public KVertex getVertex_Adjacent(int dir){
+  public KPoint getVertex_Adjacent(int dir){
     return GK.getVertex_Adjacent(this,dir);}
   
-  public KVertex getVertex_Transitionswise(int dir,int trans){
+  public KPoint getVertex_Transitionswise(int dir,int trans){
     int[] v1coor=new int[4];
     GK.getVertex_Transitionswise(
       coors[0],coors[1],coors[2],coors[3],dir,trans,v1coor);
     if(v1coor[3]==GK.DIRECTION_NULL)return null;
-    return new KVertex(v1coor);}
+    return new KPoint(v1coor);}
   
-  public KVertex getVertex_DirDis(int dir,double dis){
+  public KPoint getVertex_DirDis(int dir,double dis){
     int[] v1coor=new int[4];
     GK.getVertex_VertexVector(coors[0],coors[1],coors[2],coors[3],dir,dis,v1coor);
     if(v1coor[3]==GK.DIRECTION_NULL)return null;
-    return new KVertex(v1coor);}
+    return new KPoint(v1coor);}
   
-  public KVertex getVertex_Vector(KVector vector){
+  public KPoint getVertex_Vector(KVector vector){
     int[] v1coor=new int[4];
     GK.getVertex_VertexVector(coors[0],coors[1],coors[2],coors[3],vector.direction,vector.distance,v1coor);
     if(v1coor[3]==GK.DIRECTION_NULL)return null;
-    return new KVertex(v1coor);}
+    return new KPoint(v1coor);}
   
   /*
    * returns true if this vertex is colinear with the specified
    */
-  public boolean isColinear(KVertex v){
+  public boolean isColinear(KPoint v){
     return GK.getColinear_VertexVertex(
       coors[0],coors[1],coors[2],coors[3],
       v.coors[0],v.coors[1],v.coors[2],v.coors[3]);}
@@ -147,20 +147,20 @@ public class KVertex implements Serializable{
    * Given a v12, get the 12 vertices that that surround it
    * note that we we don't validate the vertex
    */
-  public static final List<KVertex> getV12LocalGroup(KVertex v){
-    List<KVertex> a=new ArrayList<KVertex>();
-    a.add(new KVertex(v.coors[0],v.coors[1],v.coors[2],1));//0
-    a.add(new KVertex(v.coors[0],v.coors[1],v.coors[2],2));//1
-    a.add(new KVertex(v.coors[0],v.coors[1],v.coors[2],3));//2
-    a.add(new KVertex(v.coors[0],v.coors[1],v.coors[2],4));//3
-    a.add(new KVertex(v.coors[0],v.coors[1],v.coors[2],5));//4
-    a.add(new KVertex(v.coors[0]+1,v.coors[1],v.coors[2]-1,2));//5
-    a.add(new KVertex(v.coors[0]+1,v.coors[1],v.coors[2]-1,1));//6
-    a.add(new KVertex(v.coors[0],v.coors[1]-1,v.coors[2]-1,4));//7
-    a.add(new KVertex(v.coors[0],v.coors[1]-1,v.coors[2]-1,3));//8
-    a.add(new KVertex(v.coors[0],v.coors[1]-1,v.coors[2]-1,2));//9
-    a.add(new KVertex(v.coors[0]-1,v.coors[1]-1,v.coors[2],5));//10
-    a.add(new KVertex(v.coors[0]-1,v.coors[1]-1,v.coors[2],4));//11 
+  public static final List<KPoint> getV12LocalGroup(KPoint v){
+    List<KPoint> a=new ArrayList<KPoint>();
+    a.add(new KPoint(v.coors[0],v.coors[1],v.coors[2],1));//0
+    a.add(new KPoint(v.coors[0],v.coors[1],v.coors[2],2));//1
+    a.add(new KPoint(v.coors[0],v.coors[1],v.coors[2],3));//2
+    a.add(new KPoint(v.coors[0],v.coors[1],v.coors[2],4));//3
+    a.add(new KPoint(v.coors[0],v.coors[1],v.coors[2],5));//4
+    a.add(new KPoint(v.coors[0]+1,v.coors[1],v.coors[2]-1,2));//5
+    a.add(new KPoint(v.coors[0]+1,v.coors[1],v.coors[2]-1,1));//6
+    a.add(new KPoint(v.coors[0],v.coors[1]-1,v.coors[2]-1,4));//7
+    a.add(new KPoint(v.coors[0],v.coors[1]-1,v.coors[2]-1,3));//8
+    a.add(new KPoint(v.coors[0],v.coors[1]-1,v.coors[2]-1,2));//9
+    a.add(new KPoint(v.coors[0]-1,v.coors[1]-1,v.coors[2],5));//10
+    a.add(new KPoint(v.coors[0]-1,v.coors[1]-1,v.coors[2],4));//11 
     return a;}
   
   /*
@@ -170,7 +170,7 @@ public class KVertex implements Serializable{
    */
   
   public boolean equals(Object a){
-    KVertex b=(KVertex)a;
+    KPoint b=(KPoint)a;
     return 
       coors[0]==b.coors[0]&&
       coors[1]==b.coors[1]&&
@@ -189,6 +189,6 @@ public class KVertex implements Serializable{
     return s;}
   
   public Object clone(){
-    return new KVertex(coors[0],coors[1],coors[2],coors[3]);}
+    return new KPoint(coors[0],coors[1],coors[2],coors[3]);}
   
 }

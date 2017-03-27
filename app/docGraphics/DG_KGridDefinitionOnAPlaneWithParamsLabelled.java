@@ -13,7 +13,7 @@ import java.util.Set;
 import org.fleen.geom_2D.DPoint;
 import org.fleen.geom_2D.GD;
 import org.fleen.geom_Kisrhombille.KGrid;
-import org.fleen.geom_Kisrhombille.KVertex;
+import org.fleen.geom_Kisrhombille.KPoint;
 
 /*
  * 3 examples of KGrids defined in the plane
@@ -54,9 +54,9 @@ public class DG_KGridDefinitionOnAPlaneWithParamsLabelled extends DocGraphics{
     NORTHLABELOFFSETY=20;
   private static final 
     String NORTHLABELTEXT="north=0";
-  private static final KVertex
-    FISHPOINT0=new KVertex(1,0,-1,3),
-    FISHPOINT1=new KVertex(1,0,-1,4);
+  private static final KPoint
+    FISHPOINT0=new KPoint(1,0,-1,3),
+    FISHPOINT1=new KPoint(1,0,-1,4);
   private static final int 
     FISHLABELOFFSETX=-37,
     FISHLABELOFFSETY=40;
@@ -219,20 +219,20 @@ public class DG_KGridDefinitionOnAPlaneWithParamsLabelled extends DocGraphics{
    */
   
   private void renderKGrid(KGrid g){
-    Set<KVertex> gp=renderKGrid(g,8,STROKETHICKNESS0,GREY6);
-    for(KVertex p:gp)
+    Set<KPoint> gp=renderKGrid(g,8,STROKETHICKNESS0,GREY6);
+    for(KPoint p:gp)
       renderKGridPoint(g,p);}
   
-  Set<KVertex> renderKGrid(KGrid grid,int range,double thickness,Color color){
-    Set<KVertex> points=new HashSet<KVertex>();
-    Set<KVertex> v0s=getV0s(range);
-    for(KVertex p:v0s){
+  Set<KPoint> renderKGrid(KGrid grid,int range,double thickness,Color color){
+    Set<KPoint> points=new HashSet<KPoint>();
+    Set<KPoint> v0s=getV0s(range);
+    for(KPoint p:v0s){
       points.addAll(Arrays.asList(getClockKPoints(p)));
       strokeClock(grid,p,thickness,color);}
    return points;}
   
-  void strokeClock(KGrid grid,KVertex v,double thickness,Color color){
-    KVertex[] cp=getClockKPoints(v);
+  void strokeClock(KGrid grid,KPoint v,double thickness,Color color){
+    KPoint[] cp=getClockKPoints(v);
     int j;
     for(int i=1;i<cp.length;i++){
       j=i+1;
@@ -240,13 +240,13 @@ public class DG_KGridDefinitionOnAPlaneWithParamsLabelled extends DocGraphics{
       strokeSeg(grid,cp[i],cp[j],thickness,color);
       strokeSeg(grid,cp[0],cp[i],thickness,color);}}
   
-  void strokeSeg(KGrid grid,KVertex v0,KVertex v1,double thickness,Color color){
+  void strokeSeg(KGrid grid,KPoint v0,KPoint v1,double thickness,Color color){
     DPoint 
       p0=new DPoint(grid.getPoint2D(v0)),
       p1=new DPoint(grid.getPoint2D(v1));
     strokeSeg(p0,p1,thickness,color);}
   
-  private void renderKGridPoint(KGrid grid,KVertex p){
+  private void renderKGridPoint(KGrid grid,KPoint p){
     DPoint dp=new DPoint(grid.getPoint2D(p));
     renderPoint(dp,DOTSPAN0,GREY4);
     AffineTransform graphicstransform=graphics.getTransform();
@@ -268,7 +268,7 @@ public class DG_KGridDefinitionOnAPlaneWithParamsLabelled extends DocGraphics{
    */
   
   private void renderOrigin(KGrid grid){
-    KVertex origin=new KVertex(0,0,0,0);
+    KPoint origin=new KPoint(0,0,0,0);
     DPoint p=new DPoint(grid.getPoint2D(origin));
     renderPoint(p,DOTSPAN1,RED);
     AffineTransform graphicstransform=graphics.getTransform();
@@ -293,7 +293,7 @@ public class DG_KGridDefinitionOnAPlaneWithParamsLabelled extends DocGraphics{
   double dend;
   
   private void renderTwist(KGrid g){
-    DPoint p=new DPoint(g.getPoint2D(new KVertex(0,0,0,0)));
+    DPoint p=new DPoint(g.getPoint2D(new KPoint(0,0,0,0)));
     renderTwistArc(p,TWISTARCRADIUS,TWISTARCSTART,TWISTARCEND);
     renderTwistArcArrowhead();
     renderTwistLabel(TWISTLABELTEXT);}
@@ -382,9 +382,9 @@ public class DG_KGridDefinitionOnAPlaneWithParamsLabelled extends DocGraphics{
    */
   
   private void renderNorth(KGrid grid){
-    KVertex 
-      p0=new KVertex(0,0,0,0),
-      p1=new KVertex(0,0,0,2);
+    KPoint 
+      p0=new KPoint(0,0,0,0),
+      p1=new KPoint(0,0,0,2);
     DPoint 
       p0d=new DPoint(grid.getPoint2D(p0)),
       p1d=new DPoint(grid.getPoint2D(p1));

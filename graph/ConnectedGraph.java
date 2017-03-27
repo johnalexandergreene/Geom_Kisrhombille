@@ -10,7 +10,7 @@ import java.util.Set;
 import org.fleen.geom_2D.DPoint;
 import org.fleen.geom_2D.DPolygon;
 import org.fleen.geom_Kisrhombille.KPolygon;
-import org.fleen.geom_Kisrhombille.KVertex;
+import org.fleen.geom_Kisrhombille.KPoint;
 import org.fleen.util.tree.TreeNode;
 import org.fleen.util.tree.TreeNodeIterator;
 import org.fleen.util.tree.TreeNodeServices;
@@ -101,13 +101,13 @@ public class ConnectedGraph implements TreeNode{
    * ++++++++++++++++++++++++++++++++
    */
   
-  Set<KVertex> kvertices;
+  Set<KPoint> kvertices;
   
-  public Set<KVertex> getKVertices(){
+  public Set<KPoint> getKVertices(){
     return kvertices;}
   
   private void initKVertices(){
-    kvertices=new HashSet<KVertex>();
+    kvertices=new HashSet<KPoint>();
     for(Strand s:strands){
       for(GVertex gv:s.gvertices)
         kvertices.add(gv.kvertex);}}
@@ -118,13 +118,13 @@ public class ConnectedGraph implements TreeNode{
    * ++++++++++++++++++++++++++++++++
    */
   
-  List<List<KVertex>> openkvertexsequences;
+  List<List<KPoint>> openkvertexsequences;
   
-  public List<List<KVertex>> getOpenKVertexSequences(){
+  public List<List<KPoint>> getOpenKVertexSequences(){
     return openkvertexsequences;}
   
   private void initOpenKVertexSequences(){
-    openkvertexsequences=new ArrayList<List<KVertex>>();
+    openkvertexsequences=new ArrayList<List<KPoint>>();
     for(Strand s:strands){
       if(!s.isPolygonal()){
         openkvertexsequences.add(s.getOpenKVertexSequence());}}}
@@ -194,7 +194,7 @@ public class ConnectedGraph implements TreeNode{
   private boolean isOuterPolygon(KPolygon polygon){
     DPolygon polygon2d=polygon.getDefaultPolygon2D();
     DPoint p2d;
-    for(KVertex v:getKVertices()){
+    for(KPoint v:getKVertices()){
       if(polygon.contains(v))continue;
       p2d=v.getBasicPoint2D();
       if(!polygon2d.containsPoint(p2d.x,p2d.y))return false;}
@@ -260,7 +260,7 @@ public class ConnectedGraph implements TreeNode{
   
   private List<double[]> getKVertexPoint2Ds(){
     List<double[]> p=new ArrayList<double[]>();
-    for(KVertex v:getKVertices())
+    for(KPoint v:getKVertices())
       p.add(v.getBasicPointCoor());
     return p;}
   
@@ -357,7 +357,7 @@ public class ConnectedGraph implements TreeNode{
    */
   private boolean polygonContainsConnectedGraph(KPolygon polygon,ConnectedGraph cg){
     DPolygon p2d=polygon.getDefaultPolygon2D();
-    KVertex v=cg.kvertices.iterator().next();
+    KPoint v=cg.kvertices.iterator().next();
     DPoint p=v.getBasicPoint2D();
     boolean contained=p2d.containsPoint(p.x,p.y);
     return contained;}

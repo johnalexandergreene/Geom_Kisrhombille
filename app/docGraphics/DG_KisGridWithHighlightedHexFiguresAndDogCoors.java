@@ -7,7 +7,7 @@ import java.util.Set;
 
 import org.fleen.geom_2D.DPoint;
 import org.fleen.geom_Kisrhombille.KPolygon;
-import org.fleen.geom_Kisrhombille.KVertex;
+import org.fleen.geom_Kisrhombille.KPoint;
 
 /*
  * a kgrid with coordinates on the points
@@ -16,12 +16,12 @@ public class DG_KisGridWithHighlightedHexFiguresAndDogCoors extends DocGraphics{
   
   void doGraphics(){
     initImage(IMAGEWIDTH5,IMAGEHEIGHT5,IMAGESCALE3,WHITE);
-    Set<KVertex> v0s=getV0s(12);
-    KVertex[] cp;
+    Set<KPoint> v0s=getV0s(12);
+    KPoint[] cp;
     //grid, strokes and vertices
-    for(KVertex v0:v0s){
+    for(KPoint v0:v0s){
       cp=getClockKPoints(v0);
-      for(KVertex p:cp)
+      for(KPoint p:cp)
         renderPoint(p,DOTSPAN2,GREY6);
       for(int i=1;i<=12;i++)
         strokeSeg(cp[0],cp[i],STROKETHICKNESS2,GREY6);
@@ -33,11 +33,11 @@ public class DG_KisGridWithHighlightedHexFiguresAndDogCoors extends DocGraphics{
       strokeSeg(cp[11],cp[1],STROKETHICKNESS2,GREY6);}
     //figure fill overlay
     Color cz=new Color(255,255,0,64);
-    for(KVertex v0:v0s){
+    for(KPoint v0:v0s){
       cp=getClockKPoints(v0);
       fillPolygon(new KPolygon(cp[12],cp[1],cp[3],cp[4],cp[0]),cz);}
     //figure stroke
-    for(KVertex v0:v0s){
+    for(KPoint v0:v0s){
       cp=getClockKPoints(v0);
       strokeSeg(cp[12],cp[1],STROKETHICKNESS2,GREEN);
       strokeSeg(cp[1],cp[3],STROKETHICKNESS2,GREEN);
@@ -45,7 +45,7 @@ public class DG_KisGridWithHighlightedHexFiguresAndDogCoors extends DocGraphics{
       strokeSeg(cp[4],cp[0],STROKETHICKNESS2,GREEN);
       strokeSeg(cp[0],cp[12],STROKETHICKNESS2,GREEN);}
     //render dog
-    for(KVertex v0:v0s){
+    for(KPoint v0:v0s){
       cp=getClockKPoints(v0);
       renderDog(cp[12]);
       renderDog(cp[1]);
@@ -54,7 +54,7 @@ public class DG_KisGridWithHighlightedHexFiguresAndDogCoors extends DocGraphics{
       renderDog(cp[4]);
       renderDog(cp[0]);}}
   
-  void renderDog(KVertex v){
+  void renderDog(KPoint v){
     DPoint p=v.getBasicPoint2D();
     AffineTransform graphicstransform=graphics.getTransform();
     double[] pt={p.x,p.y};

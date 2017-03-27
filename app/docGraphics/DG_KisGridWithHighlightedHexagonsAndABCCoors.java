@@ -5,7 +5,7 @@ import java.awt.geom.AffineTransform;
 import java.util.Set;
 
 import org.fleen.geom_2D.DPoint;
-import org.fleen.geom_Kisrhombille.KVertex;
+import org.fleen.geom_Kisrhombille.KPoint;
 
 /*
  * A few polygons on a grid
@@ -15,15 +15,15 @@ public class DG_KisGridWithHighlightedHexagonsAndABCCoors extends DocGraphics{
   
   void doGraphics(){
     initImage(IMAGEWIDTH5,IMAGEHEIGHT5,IMAGESCALE3,WHITE);
-    Set<KVertex> v0s=getV0s(12);
-    KVertex[] cp;
+    Set<KPoint> v0s=getV0s(12);
+    KPoint[] cp;
     
-    for(KVertex v0:v0s){
+    for(KPoint v0:v0s){
       cp=getClockKPoints(v0);
-      for(KVertex p:cp)
+      for(KPoint p:cp)
         renderPoint(p,DOTSPAN2,GREY6);}
     
-    for(KVertex v0:v0s){
+    for(KPoint v0:v0s){
       cp=getClockKPoints(v0);
       
       for(int i=1;i<=12;i++)
@@ -37,7 +37,7 @@ public class DG_KisGridWithHighlightedHexagonsAndABCCoors extends DocGraphics{
       strokeSeg(cp[11],cp[1],STROKETHICKNESS2,GREEN);
       renderHexagonCoors(v0);}}
   
-  void renderHexagonCoors(KVertex v){
+  void renderHexagonCoors(KPoint v){
     DPoint p=v.getBasicPoint2D();
     AffineTransform graphicstransform=graphics.getTransform();
     double[] pt={p.x,p.y};

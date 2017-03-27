@@ -6,7 +6,7 @@ import java.util.List;
 import org.fleen.geom_2D.GD;
 import org.fleen.geom_Kisrhombille.GK;
 import org.fleen.geom_Kisrhombille.KPolygon;
-import org.fleen.geom_Kisrhombille.KVertex;
+import org.fleen.geom_Kisrhombille.KPoint;
 
 /*
  * a sequence of vertices
@@ -35,8 +35,8 @@ class Strand{
   GVertex getFirst(){
     return gvertices.get(0);}
   
-  List<KVertex> getOpenKVertexSequence(){
-    List<KVertex> a=new ArrayList<KVertex>();
+  List<KPoint> getOpenKVertexSequence(){
+    List<KPoint> a=new ArrayList<KPoint>();
     for(GVertex gv:gvertices)
       a.add(gv.kvertex);
     return a;}

@@ -52,12 +52,12 @@ public class KMetagon implements Serializable{
     normalizeBaseInterval();}
   
   public KMetagon(KPolygon polygon){
-    this(polygon.toArray(new KVertex[polygon.size()]));}
+    this(polygon.toArray(new KPoint[polygon.size()]));}
   
-  public KMetagon(List<KVertex> vertices){
-    this(vertices.toArray(new KVertex[vertices.size()]));}
+  public KMetagon(List<KPoint> vertices){
+    this(vertices.toArray(new KPoint[vertices.size()]));}
   
-  public KMetagon(KVertex... vertices){
+  public KMetagon(KPoint... vertices){
     baseinterval=vertices[0].getDistance(vertices[1]);
     int dir0=vertices[0].getDirection(vertices[1]),dir1;
     int vectorcount=vertices.length-2;
@@ -79,7 +79,7 @@ public class KMetagon implements Serializable{
    */
   
   private static final int MAXTRANSITIONSFORBASEINTERVALNORMALIZATION=200;
-  private static final KVertex ORIGIN=new KVertex(0,0,0,0);
+  private static final KPoint ORIGIN=new KPoint(0,0,0,0);
   
   /*
    * This standardizes our base interval to its minimal form 
@@ -118,7 +118,7 @@ public class KMetagon implements Serializable{
       throw new IllegalArgumentException("KMetagon.normalizeBaseInterval() failed : KMETAGON : "+this);}}
   
   private boolean tryBaseInterval(int prospectivebaseinterval){
-    KVertex v=new KVertex(0,0,0,0);
+    KPoint v=new KPoint(0,0,0,0);
     KVector e=new KVector(0,prospectivebaseinterval);
     v=v.getVertex_Vector(e);
     if(v==null)return false;
@@ -177,7 +177,7 @@ public class KMetagon implements Serializable{
    * returns polygon with specified v0 and init direction. 
    * Scale is default (1.0).
    */
-  public KPolygon getPolygon(KVertex v0,int d0){
+  public KPolygon getPolygon(KPoint v0,int d0){
     return getPolygon(v0,d0,1.0);}
   
   /*
@@ -186,14 +186,14 @@ public class KMetagon implements Serializable{
    * scale is dis(v0,v1)/baseinterval
    * twist is default (true. that is, clockwise)
    */
-  public KPolygon getPolygon(KVertex v0,KVertex v1){
+  public KPolygon getPolygon(KPoint v0,KPoint v1){
     return getPolygon(v0,v1,true);}
   
   /*
    * we use this for deriving polygon from jigs
    * v0,v1 and twist are gotten from an anchor I suppose
    */
-  public KPolygon getPolygon(KVertex v0,KVertex v1,boolean twist){
+  public KPolygon getPolygon(KPoint v0,KPoint v1,boolean twist){
     int dir=v0.getDirection(v1);
     double scale=v0.getDistance(v1)/baseinterval;
     return getPolygon(v0,dir,scale,twist);}
@@ -226,14 +226,14 @@ public class KMetagon implements Serializable{
    * returns a scaled kpolygon derived from this ghost and the specified v0, initial direction and scaling factor
    * returns null on fail
    */
-  public KPolygon getPolygon(KVertex v0,int direction,double scale){
+  public KPolygon getPolygon(KPoint v0,int direction,double scale){
     KPolygon p=getPolygon(v0,direction,scale,true);
     return p;}
   
-  public KPolygon getPolygon(KVertex v0,int direction,double scale,boolean twist){
+  public KPolygon getPolygon(KPoint v0,int direction,double scale,boolean twist){
     KPolygon p=new KPolygon();
     p.add(v0);
-    KVertex vertex=v0;
+    KPoint vertex=v0;
     KVector vector=new KVector(direction,baseinterval*scale);
     vertex=vertex.getVertex_Vector(vector);
     p.add(vertex);
@@ -287,7 +287,7 @@ public class KMetagon implements Serializable{
     //test the vector and vertex counts
     if(polygonsize!=vectors.length+2)return null;
     List<KAnchor> anchors=new ArrayList<KAnchor>();
-    KVertex v0,v1;
+    KPoint v0,v1;
     KPolygon protated,pmeta;
     //get all possible anchors, keep the ones that work
     //do it for the polygon unreversed

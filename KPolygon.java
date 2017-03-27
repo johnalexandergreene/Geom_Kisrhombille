@@ -9,7 +9,7 @@ import java.util.List;
 import org.fleen.geom_2D.DPolygon;
 
 
-public class KPolygon extends ArrayList<KVertex> implements Serializable{
+public class KPolygon extends ArrayList<KPoint> implements Serializable{
 
   private static final long serialVersionUID=-7629682211684455666L;
   
@@ -24,10 +24,10 @@ public class KPolygon extends ArrayList<KVertex> implements Serializable{
   public KPolygon(int size){
     super.size();}
   
-  public KPolygon(List<KVertex> v){
+  public KPolygon(List<KPoint> v){
     super(v);}
   
-  public KPolygon(KVertex... v){
+  public KPolygon(KPoint... v){
     this(Arrays.asList(v));}
   
   /*
@@ -50,7 +50,7 @@ public class KPolygon extends ArrayList<KVertex> implements Serializable{
   public void reverse(){
     int s=size();
     if(s<3)return;
-    List<KVertex> a=new ArrayList<KVertex>(size());
+    List<KPoint> a=new ArrayList<KPoint>(size());
     int vindex=0;
     for(int i=0;i<s;i++){
       a.add(get(vindex));
@@ -64,9 +64,9 @@ public class KPolygon extends ArrayList<KVertex> implements Serializable{
   
   //TODO this could probably be optimized
   public void removeRedundantColinearVertices(){
-    List<KVertex> rcv=new ArrayList<KVertex>();
+    List<KPoint> rcv=new ArrayList<KPoint>();
     int s=size(),iprev,inext;
-    KVertex v,vprev,vnext;
+    KPoint v,vprev,vnext;
     for(int i=0;i<s;i++){
       iprev=i-1;
       if(iprev==-1)iprev=s-1;
@@ -111,9 +111,9 @@ public class KPolygon extends ArrayList<KVertex> implements Serializable{
    *   Not just the corners, the vertices in-between the corners too. If any. 
    */
   public KPolygon getReticulation(){
-    List<KVertex> vertices=new ArrayList<KVertex>();
+    List<KPoint> vertices=new ArrayList<KPoint>();
     int s=size(),i0,i1;
-    KVertex c0,c1,v;
+    KPoint c0,c1,v;
     int d;
     for(i0=0;i0<s;i0++){
       i1=i0+1;
@@ -133,7 +133,7 @@ public class KPolygon extends ArrayList<KVertex> implements Serializable{
    * consider using this method with a reticulated polygon
    */
   public boolean touch(KPolygon p){
-    for(KVertex v:p)
+    for(KPoint v:p)
       if(contains(v))return true;
     return false;}
   
@@ -141,9 +141,9 @@ public class KPolygon extends ArrayList<KVertex> implements Serializable{
    * Returns all vertices shared by the specified and this in a list
    * Returns empty list if there are no shared vertices.
    */
-  public List<KVertex> getSharedVertices(KPolygon p){
-    List<KVertex> s=new ArrayList<KVertex>();
-    for(KVertex v:p)
+  public List<KPoint> getSharedVertices(KPolygon p){
+    List<KPoint> s=new ArrayList<KPoint>();
+    for(KPoint v:p)
       if(contains(v))s.add(v);
     return s;}
   
@@ -162,7 +162,7 @@ public class KPolygon extends ArrayList<KVertex> implements Serializable{
     //get the direction of the indices in p1 relative to p0
     int ip1maybenext=ip1+1;
     if(ip1maybenext==s)ip1maybenext=0;
-    KVertex v=p0.get(1);
+    KPoint v=p0.get(1);
     int incrementp1=-1;//index-
     if(indexOf(v)==ip1maybenext)incrementp1=1;
     for(ip0=0;ip0<s;ip0++){
@@ -189,13 +189,13 @@ public class KPolygon extends ArrayList<KVertex> implements Serializable{
   
   public Object clone(){
     KPolygon p=new KPolygon(size());
-    for(KVertex q:this)
-      p.add((KVertex)q.clone());
+    for(KPoint q:this)
+      p.add((KPoint)q.clone());
     return p;}
   
   public String toString(){
     if(isEmpty())return"P[]";
-    KVertex v;
+    KPoint v;
     StringBuffer a=new StringBuffer();
     v=get(0);
     a.append("P["+v);

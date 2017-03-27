@@ -14,7 +14,7 @@ public class KSeg{
    * ################################
    */
   
-  public KSeg(KVertex a,KVertex b){
+  public KSeg(KPoint a,KPoint b){
     //put the vertices in the proper order
     int gta=a.getGeneralType(),gtb=b.getGeneralType();
     if(gta==GK.VERTEX_GTYPE_4){
@@ -45,12 +45,12 @@ public class KSeg{
    * ################################
    */
   
-  private KVertex vertex0,vertex1;
+  private KPoint vertex0,vertex1;
   
-  public KVertex getVertex0(){
+  public KPoint getVertex0(){
     return vertex0;}
   
-  public KVertex getVertex1(){
+  public KPoint getVertex1(){
     return vertex1;}
   
   /*

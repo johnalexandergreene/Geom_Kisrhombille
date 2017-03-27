@@ -17,7 +17,7 @@ public class KAnchor implements Serializable{
    * ################################
    */
   
-  public KAnchor(KVertex v0,KVertex v1,boolean twist){
+  public KAnchor(KPoint v0,KPoint v1,boolean twist){
     this.v0=v0;
     this.v1=v1;
     this.twist=twist;}
@@ -33,7 +33,7 @@ public class KAnchor implements Serializable{
    * ################################
    */
   
-  public KVertex v0,v1;
+  public KPoint v0,v1;
   public boolean twist;
   
   /*
