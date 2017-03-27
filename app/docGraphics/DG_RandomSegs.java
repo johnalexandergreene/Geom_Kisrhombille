@@ -12,7 +12,7 @@ public class DG_RandomSegs extends DocGraphics{
   
   void doGraphics(){
     //do the grid
-    initImage(IMAGEWIDTH0,IMAGEHEIGHT0,IMAGESCALE1,WHITE);
+    initImage(IMAGEWIDTH1,IMAGEHEIGHT1,IMAGESCALE1,WHITE);
     strokeGrid(8,STROKETHICKNESS1,GREY6);
     //get some nonintersecting segs
     List<KSeg> segs=null;

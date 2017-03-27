@@ -3,11 +3,13 @@ package org.fleen.geom_Kisrhombille.app.docGraphics;
 import java.awt.Font;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
+import java.util.List;
 import java.util.Set;
 
 import org.fleen.geom_2D.DPoint;
 import org.fleen.geom_2D.GD;
 import org.fleen.geom_Kisrhombille.KPoint;
+import org.fleen.geom_Kisrhombille.KSeg;
 
 /*
  * some segs on a kgrid. no coordinates.
@@ -20,7 +22,13 @@ public class DG_KGridAndSegs extends DocGraphics{
     Set<KPoint> points=strokeGrid(8,STROKETHICKNESS2,GREY6);
     for(KPoint p:points)
       renderPoint(p,DOTSPAN1,GREY6);
-    //
+    //do 3 segs
+    List<KSeg> segs=null;
+    while(segs==null||segsIntersect(segs))
+      segs=getSegs(6,2,5);
+    //render segs
+    for(KSeg s:segs)
+      renderSeg(s,STROKETHICKNESS2,DOTSPAN1,GREEN);
 //    renderPoint(new KVertex(-3,-4,-1,5));
 //    renderPoint(new KVertex(-1,-2,-1,4));
 //    renderPoint(new KVertex(1,1,0,0));
