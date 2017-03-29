@@ -105,7 +105,7 @@ A KGrid is an instance of our coordinate system defined in terms of the plane. I
 
 ![class kseg](pix/segs000.png)
     
-A line segment.
+A KSeg is a line segment in a KGrid.
 **p0** and **p1** are KPoints. Two points define a line segment. All line segments in our system align with the axes of the system, *viz* the points of a KSeg are always coaxial. See above for details on axes.
 
 ###KPolygon
@@ -116,7 +116,7 @@ A line segment.
 
 ![class kpolygon](pix/kgridandkpolygons.png)
     
-A polygon.
+AKPolygon is a polygon in a KGrid.
 **points** is a list of 3..n KPoints. Each adjacent pair of points defines a KSeg. Thus, as is the case with KSegs, a KPolygon is aligned with the axes of our coordinate system. See above for details on axes.
 
 ## Nesting Geometry
