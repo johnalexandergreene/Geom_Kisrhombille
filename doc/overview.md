@@ -121,25 +121,24 @@ AKPolygon is a polygon in a KGrid.
 
 ## Nesting Geometry
 
-Recall that we define a **KGrid** using 4 params : origin, forward, fish and twist (see above).
+Recall that we define a **KGrid** using 4 params : origin, north, fish and twist (see above).
 
-We can use a KPolygon to get those params. We can derive **origin** from V0, **north** from dir(V0,V1), **fish** from dis(V0,V1) and **twist** from the chirality of the point sequence. ([2]())
-
-
-
-We can derive these params from a **KPolygon**.
-
+We can derive these params from a **KPolygon**. We can derive **origin** from V0, **north** from dir(V0,V1), **fish** from dis(V0,V1) and **twist** from the chirality of the polygon's point sequence. ([2]())
 ![kpolygon with kgrid params labelled](pix/kgriddefinedbykpolygon.png)
 
-And then we can define a new **KPolygon** in terms of that **KGrid**.
-
+Thus define a new **KGrid**.
 ![kgrid defined within kpolygon](pix/kgridinsidekpolygon.png)
+
+And then we can define a new **KPolygon** in terms of that **KGrid**.
+![kgrid defined within kpolygon kgrid](pix/kgridinsidekpolygon.png)
 
 And then, within that new grid, we can define another polygon, and so on.
 
 ![3 levels of nesting](pix/kgriddensities.png)
 
-We can also add a scaling parameter, **density**, an integer, to control the denisity of the new **KGrid** ([3]())
+We can also add a scaling parameter, **density**, an integer, to control the resolution level of the new **KGrid** ([3]())
+
+(We are exploiting a special property of the Kisrhombille Tessellation here. The property of the same shape being describable at an infinite range of tessellation resolutions.)
 
 ![kgrids at differentdensities](pix/kgriddensities.png)
 
