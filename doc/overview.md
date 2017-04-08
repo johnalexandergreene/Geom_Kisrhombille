@@ -142,16 +142,9 @@ We can also add a scaling parameter, **density**, an integer, to control the res
 
 ![kgrids at differentdensities](pix/kgriddensities.png)
 
+This suggests that we could create some kind of infinite nesting structure, a *vector fractal*.
 
-
-
-
-
-
-
-##A Vector Fractal Based on Nesting KGrid Geometry
-
-
+See the [Forsythia]() document for an overview of that.
 
 I'm naming this fractal **Greene Forsythia**, after myself and a bush in my yard.
 

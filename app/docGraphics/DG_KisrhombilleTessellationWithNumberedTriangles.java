@@ -20,7 +20,7 @@ public class DG_KisrhombilleTessellationWithNumberedTriangles extends DocGraphic
     List<GridTriangle> triangles=getGridTriangles(12);
     for(GridTriangle t:triangles){
       strokePolygon(t,STROKETHICKNESS0,BLACK);
-//      drawIndex(t);
+      drawIndex(t);
       }}
   
   void drawIndex(GridTriangle t){
