@@ -369,17 +369,6 @@ abstract class DocGraphics{
 //    
 //  }
   
-//   void renderAHexagonCoordinateSystemAxis(double[] p0,double[] p1,String axisname,Graphics2D graphics){
-//    Path2D path=new Path2D.Double();
-//    double d=GD.getDirection_PointPoint(p1[0],p1[1],p0[0],p0[1]);
-//    
-//    path.moveTo(p0[0],p0[1]);
-//    path.lineTo(p1[0],p1[1]);
-//    graphics.setPaint(new Color(0,0,255,64));
-//    BasicStroke s=new BasicStroke(24f,BasicStroke.CAP_SQUARE,BasicStroke.JOIN_ROUND,0,null,0);
-//    graphics.setStroke(s);
-//    graphics.draw(path);}
-  
   /*
    * render the coordinates as 4 numbers in a square
    * we gotta paint them onto their own image then paint the image, to get around the scale stuff

@@ -138,11 +138,11 @@ And then, within that new grid, we can define another polygon, and so on.
 
 We can also add a scaling parameter, **density**, an integer, to control the resolution level of the new **KGrid** ([3]())
 
-(We are exploiting a special property of the Kisrhombille Tessellation here. The property of the same shape being describable at an infinite range of tessellation resolutions.)
-
 ![kgrids at differentdensities](pix/kgriddensities.png)
 
-This suggests that we could create some kind of infinite nesting structure, a *vector fractal*.
+We are exploiting a special property of the Kisrhombille Tessellation here. The property of the same shape being describable at an infinite range of tessellation resolutions (this property is shared by square and triangle tessellations but not by hexagon tessellations).
+
+This suggests that we could create some kind of infinite nesting structure, a variety of *vector fractal*.
 
 See the [Forsythia]() document for an overview of that.
 
