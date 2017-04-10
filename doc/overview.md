@@ -124,29 +124,33 @@ AKPolygon is a polygon in a KGrid.
 Recall that we define a **KGrid** using 4 params : origin, north, fish and twist (see above).
 
 We can derive these params from a **KPolygon**. We can derive **origin** from V0, **north** from dir(V0,V1), **fish** from dis(V0,V1) and **twist** from the chirality of the polygon's point sequence. ([2]())
-![kpolygon with kgrid params labelled](pix/kgriddefinedbykpolygon.png)
 
-Thus define a new **KGrid**.
-![kgrid defined within kpolygon](pix/kgridinsidekpolygon.png)
+That is to say, given **grid0**, create a polygon (that hexagon there) in **grid0**. Then from that polygon get the params for a new grid, **grid1**.
+![kpolygon with kgrid params labelled](pix/grid_polygon_newgridparams.png)
 
-And then we can define a new **KPolygon** in terms of that **KGrid**.
-![kgrid defined within kpolygon kgrid](pix/kgridinsidekpolygon.png)
+**grid1.origin** is the real point of **p0**.
+
+**grid1.north** is the real direction from **p0** to **p1**.
+
+**grid1.fish** is derived from the distance from **p0** to **p1** (dp0p1).  Get **M**, the distance from **p0** to **p1** in terms of **grid0.fish**.
+Then **grid1.fish** = dp0p1 / M.
+
+Thus we define a new grid, **grid1**.
+![kgrid within kpolygon](pix/kgridinsidekpolygon.png)
+
+We can also add a 4th param, an integer, **density**. By dividing our new **fish** by **density** we can control the resolution of the new grid.([3]())
+
+![3 polygons with 3 grids at 3 different densities](pix/kgridinsidekpolygon.png)
 
 And then, within that new grid, we can define another polygon, and so on.
 
-![3 levels of nesting](pix/kgriddensities.png)
-
-We can also add a scaling parameter, **density**, an integer, to control the resolution level of the new **KGrid** ([3]())
-
-![kgrids at differentdensities](pix/kgriddensities.png)
+![grid enclosing pollygon enclosing grid enclosing polygon](pix/kgriddensities.png)
 
 We are exploiting a special property of the Kisrhombille Tessellation here. The property of the same shape being describable at an infinite range of tessellation resolutions (this property is shared by square and triangle tessellations but not by hexagon tessellations).
 
-This suggests that we could create some kind of infinite nesting structure, a variety of *vector fractal*.
+Obviously this suggests that we could create some kind of infinite nesting structure, a variety of *vector fractal*.
 
-See the [Forsythia]() document for an overview of that.
-
-I'm naming this fractal **Greene Forsythia**, after myself and a bush in my yard.
+See the [Forsythia Fractal]() document for an overview of that.
 
 # FOOTNOTES
 
