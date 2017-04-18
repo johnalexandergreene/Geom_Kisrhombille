@@ -125,7 +125,10 @@ Recall that we define a **KGrid** using 4 params : origin, north, fish and twist
 
 We can derive these params from a **KPolygon**. We can derive **origin** from V0, **north** from dir(V0,V1), **fish** from dis(V0,V1) and **twist** from the chirality of the polygon's point sequence. ([2]())
 
-That is to say, given **grid0**, create a polygon (that hexagon there) in **grid0**. Then from that polygon get the params for a new grid, **grid1**.
+For example.
+Given **grid0**
+Create a polygon (that hexagon there) in **grid0**. 
+Then from that polygon derive the params for a new grid, **grid1**.
 ![kpolygon with kgrid params labelled](pix/grid_polygon_newgridparams.png)
 
 **grid1.origin** is the real point of **p0**.
@@ -136,9 +139,10 @@ That is to say, given **grid0**, create a polygon (that hexagon there) in **grid
 Then **grid1.fish** = dp0p1 / M.
 
 Thus we define a new grid, **grid1**.
-![kgrid within kpolygon](pix/kgridinsidekpolygon.png)
+![kgrid within kpolygon](pix/gridinpolygoningrid.png)
+(Note that our new grid is not actually constrained to the area of the polygon, I'm just illustrating it that way to make it clear.)
 
-We can also add a 4th param, an integer, **density**. By dividing our new **fish** by **density** we can control the resolution of the new grid.([3]())
+We can also use a 4th param, an integer, **density**. By dividing our new **fish** by **density** we can control the resolution of the new grid.([3]())
 
 ![3 polygons with 3 grids at 3 different densities](pix/kgridinsidekpolygon.png)
 
