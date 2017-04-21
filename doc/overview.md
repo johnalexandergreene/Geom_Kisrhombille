@@ -1,7 +1,8 @@
-# A Kisrhombille Tessellation Based Geometry and a New Type of Fractal
+# A Kisrhombille Tessellation Based Geometry and a New Kind of Fractal
 
-A rendering of one instance of one variety of the fractal.
 ![](pix/headerdecoration.png)
+
+by John Greene john@fleen.org
 
 ---
 
@@ -138,31 +139,37 @@ Then from that polygon derive the params for a new grid, **grid1**.
 **grid1.fish** is derived from the distance from **p0** to **p1** (dp0p1).  Get **M**, the distance from **p0** to **p1** in terms of **grid0.fish**.
 Then **grid1.fish** = dp0p1 / M.
 
+**grid1.twist** is derived from the chirality of the vertex process. Clockwise chirality means twist=true.
+
 Thus we define a new grid, **grid1**.
 ![kgrid within kpolygon](pix/gridinpolygoningrid.png)
 (Note that our new grid is not actually constrained to the area of the polygon, I'm just illustrating it that way to make it clear.)
 
-We can also use a 4th param, an integer, **density**. By dividing our new **fish** by **density** we can control the resolution of the new grid.([3]())
+We can also use a 4th param, an integer, **density**. By dividing our new **fish** by **density** we can control the resolution of the new grid.([3]()) ([4]())
 
-![3 polygons with 3 grids at 3 different densities](pix/kgridinsidekpolygon.png)
+| 3 densities | | |
+| --- | --- | --- |
+| ![density 1](pix/kgridhexagondensity1.png) | ![density 2](pix/kgridhexagondensity2.png) | ![density 3](pix/kgridhexagondensity3.png) |
 
 And then, within that new grid, we can define another polygon, and so on.
 
-![grid enclosing pollygon enclosing grid enclosing polygon](pix/kgriddensities.png)
+![nested stuff](pix/nestedstuff.png)
 
-We are exploiting a special property of the Kisrhombille Tessellation here. The property of the same shape being describable at an infinite range of tessellation resolutions (this property is shared by square and triangle tessellations but not by hexagon tessellations).
+Obviously this suggests that we could create some kind of infinite nesting structure, a variety of *vector fractal*. We could implement the play of geometry and geometry operators with some kind of *shape grammar*, manage symmetry and grouping somehow and get stuff like this
 
-Obviously this suggests that we could create some kind of infinite nesting structure, a variety of *vector fractal*.
+ ![forsythia fractal sample 2](pix/ffsample2.png)
 
-See the [Forsythia Fractal]() document for an overview of that.
+See the [Forsythia Fractal]() for more on that.
 
-# FOOTNOTES
+## FOOTNOTES
 
 (1) Yes we could do it with 3 integers (2 for the hexagon and 1 for the figure) but right now we're doing it with 4. Going to 3 would mean rewriting a bunch of code.
 
 (2) Details of fish derivation. We derive fish by getting the length of (v0,v1) in terms of fish (by adding up the segs) then divide the real distance from v0 to v1 by that to get fish.
 
 (3) For density control we divide fish by the density param.
+
+(4) We are exploiting a special property of the Kisrhombille Tessellation here. The property of the same shape being describable at an infinite range of tessellation resolutions. This property is shared by square and triangle tessellations but not by hexagon tessellations.
 
 
 
