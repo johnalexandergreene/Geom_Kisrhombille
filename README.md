@@ -1,5 +1,3 @@
-# Geom_Kisrhombille
-
 # A Kisrhombille Tessellation Based Geometry and a New Kind of Fractal
 
 ![](https://github.com/johnalexandergreene/Geom_Kisrhombille/raw/master/doc/pix/headerdecoration.png)
