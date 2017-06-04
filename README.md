@@ -159,7 +159,7 @@ Obviously this suggests that we could create some kind of infinite nesting struc
 
  ![forsythia fractal sample 2](https://github.com/johnalexandergreene/Geom_Kisrhombille/raw/master/doc/pix/ffsample2.png)
 
-See the [Forsythia Fractal]() for more on that.
+See the [Forsythia Fractal](https://github.com/johnalexandergreene/Forsythia/tree/master/app/grammarEditor) for more on that.
 
 ## FOOTNOTES
 
