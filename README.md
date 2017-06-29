@@ -44,6 +44,9 @@ The first three integers **(ant,bat,cat)** address a hexagon.
 
 ![hexagons with coors](https://github.com/johnalexandergreene/Geom_Kisrhombille/raw/master/doc/pix/hexagonswithcoors.png) 
 
+## ie ##
+![hexagons with coors and arrows](https://github.com/johnalexandergreene/Geom_Kisrhombille/raw/master/doc/pix/hexgridwithcoorsandarrows.png)
+
 The fourth integer **(dog)** addresses a point within a five-sided polygonal figure (the yellow things) based on that hexagon.
 ![kis grid with figures and dogs](https://github.com/johnalexandergreene/Geom_Kisrhombille/raw/master/doc/pix/kisgridfiguresanddogs.png)
 
