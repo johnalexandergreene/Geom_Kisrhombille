@@ -28,11 +28,11 @@ The intervals of **F**, **G** and **H** are referred to as **fish**, **goat** an
 **goat** = fish $\times$ √3
 **hawk** = fish $\times$ 2
 
-##KGrid : A Kisrhombille Tessellation Based Geometry Building System
+## KGrid : A Kisrhombille Tessellation Based Geometry Building System
 
 **KGrid** is a geometry system (TODO game? formal system?...). Within it we build shapes and such. It has a method for addressing points and a rule governing how we build.
 
-###Addressing Points
+### Addressing Points
 
 In KGrid we address the points where the corners of the triangles touch. That is to say, where the lines intersect. I.e. the black dots.
 ![](pix/kiswithdottedintersections.png)
@@ -50,7 +50,7 @@ The fourth integer **(dog)** addresses a point within a five-sided polygonal fig
 Put them together and that's our coordinate system. It's discrete.
 ![kis grid with coors](pix/kisgridwithcoors.png)
 
-###Axes, Directions and the Geometry Building Rule
+### Axes, Directions and the Geometry Building Rule
 
 In KGrid we have 6 axes and 12 directions. 
 ![kis grid axes star](pix/gridaxesstar.png)
@@ -59,9 +59,9 @@ When we define shapes within KGrid we align their sides with the axes.
 **That's the building rule**. Just as if we were building the shapes out of **unit triangle** shaped tiles (see *The Kisrhombille Tessellation*, above).
 ![kis grid axes aligned shapes](pix/gridwithaxesalignedshapes.png)
 
-##Object Classes
+## Object Classes
 
-###KPoint
+### KPoint
  
     class KPoint{
       ant
@@ -78,7 +78,7 @@ A KPoint is a point in the KGrid.
 Values for ant, bat and cat are in range \[minint,maxint\], though some combinations of values are invalid.
 Value for dog is in range \[0,5\].
 
-###KGrid
+### KGrid
 
     class KGrid{
       origin
@@ -97,7 +97,7 @@ A KGrid is an instance of our coordinate system defined in terms of the plane. I
 **fish** is a floating point value. It is our unit interval. The shortest side of our unit triangle. 
 **twist** is a value denoting chirality. Clockwise or counterclockwise. Probably boolean. It gives us the direction of east and west relative to north. It's also the direction that we go when traversing the perimenter of that hexagon-based figure that we use for **dog** (see above).
 
-###KSeg
+### KSeg
 
     KSeg{
       p0
@@ -109,7 +109,7 @@ A KGrid is an instance of our coordinate system defined in terms of the plane. I
 A KSeg is a line segment in a KGrid.
 **p0** and **p1** are KPoints. Two points define a line segment. All line segments in our system align with the axes of the system, *viz* the points of a KSeg are always coaxial. See above for details on axes.
 
-###KPolygon
+### KPolygon
 
     KPolygon{
       points

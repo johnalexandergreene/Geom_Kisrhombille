@@ -4,7 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.fleen.geom_2D.DPolygon;
 
@@ -106,12 +108,24 @@ public class KPolygon extends ArrayList<KPoint> implements Serializable{
     return false;}
   
   /*
+   * ++++++++++++++++++++++++++++++++
+   * GET RETICULATION
+   * ++++++++++++++++++++++++++++++++
+   */
+  
+  private KPolygon reticulation=null;
+  
+  public KPolygon getReticulation(){
+    if(reticulation==null)
+      initReticulation();
+    return reticulation;}
+  /*
    * returns the fully reticulated form of this polygon
    * That is, all traversed vertices are represented. 
    *   Not just the corners, the vertices in-between the corners too. If any. 
    */
-  public KPolygon getReticulation(){
-    List<KPoint> vertices=new ArrayList<KPoint>();
+  private void initReticulation(){
+    reticulation=new KPolygon();
     int s=size(),i0,i1;
     KPoint c0,c1,v;
     int d;
@@ -123,9 +137,82 @@ public class KPolygon extends ArrayList<KPoint> implements Serializable{
       d=c0.getDirection(c1);
       v=c0;
       while(!v.equals(c1)){
-        vertices.add(v);
+        reticulation.add(v);
         v=v.getVertex_Adjacent(d);}}
-    return new KPolygon(vertices);}
+    reticulation.trimToSize();}
+  
+  /**
+   * Same as getReticulation
+   * included for semantic reasons.
+   * 
+   * @return all points on the perimeter of the kpolygon. Not just corners but also the points between corners.
+   */
+  public KPolygon getPerimeterPoints(){
+    return getReticulation();}
+  
+  /*
+   * ++++++++++++++++++++++++++++++++
+   * GET INTERIOR SEGS
+   * ++++++++++++++++++++++++++++++++
+   */
+  
+  private Set<KSeg> interiorsegs=null;
+  
+  /**
+   * @return all segs formed by a pair of colinear points in the perimeter points.
+   * 
+   * Exclude
+   *   Segs that touch an edge point other than the end points
+   *   Segs that are composed of 2 adjacent edge points
+   */
+  public Set<KSeg> getInteriorSegs(){
+    if(interiorsegs==null)
+      initInteriorSegs();
+    return interiorsegs;}
+  
+  private void initInteriorSegs(){
+    interiorsegs=getRawInteriorSegs();
+    cullInteriorSegsThatCrossOutside();
+    cullInteriorSegsThatAreEdgeSegs();}
+  
+  private Set<KSeg> getRawInteriorSegs(){
+    //get all the segs
+    KPolygon pp=getPerimeterPoints();
+    Set<KSeg> segs=new HashSet<KSeg>();
+    for(KPoint p0:pp){
+      for(KPoint p1:pp){
+        if(!p0.equals(p1))
+          segs.add(new KSeg(p0,p1));}}
+    return segs;}
+  
+  /*
+   * Segs that touch an edge point other than the end points have crossed outside the polygon.
+   * Get rid of those
+   */
+  private void cullInteriorSegsThatCrossOutside(){
+    KPolygon pp=getPerimeterPoints();
+    //interiorsegs
+    
+  }
+  
+  /*
+   * Segs that are composed of 2 adjacent edge points
+   */
+  private void cullInteriorSegsThatAreEdgeSegs(){
+    
+  }
+  
+  
+  /**
+   * @return all points that are inside the area of the polygon, including the perimeter points.
+   * 
+   * For each interior seg
+   * get all of the points it crosses. Not just the end points but also the points in between the end points.
+   * Put them in a set.
+   */
+  public Set<KPoint> getInteriorPoints(){
+    
+  }
   
   /*
    * returns true if the specified shares at least one vertex with this
