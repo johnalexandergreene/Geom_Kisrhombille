@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -188,12 +189,28 @@ public class KPolygon extends ArrayList<KPoint> implements Serializable{
   /*
    * Segs that touch an edge point other than the end points have crossed outside the polygon.
    * Get rid of those
+   * 
+   * given the set of all segs (raw interior segs, presently interiorsegs)
+   *   test each one
+   *     get the points between its end points
+   *     if any of those points is in perimeterpoints then that seg crosses. So remove it from interiorsegs
    */
   private void cullInteriorSegsThatCrossOutside(){
     KPolygon pp=getPerimeterPoints();
-    //interiorsegs
-    
-  }
+    Iterator<KSeg> i=interiorsegs.iterator();
+    List<KPoint> tween;
+    KSeg seg;
+    while(i.hasNext()){
+      seg=i.next();
+      tween=seg.getBetweenPoints();
+      if(containsPerimeterPoints(tween,pp))
+        i.remove();}}
+  
+  private boolean containsPerimeterPoints(List<KPoint> tween,KPolygon pp){
+    for(KPoint p:tween)
+      if(pp.contains(p))
+        return true;
+    return false;}
   
   /*
    * Segs that are composed of 2 adjacent edge points
@@ -202,13 +219,22 @@ public class KPolygon extends ArrayList<KPoint> implements Serializable{
     
   }
   
+/*
+ * ++++++++++++++++++++++++++++++++
+ * GET INTERIOR POINTS
+ * ++++++++++++++++++++++++++++++++
+ */
+  
+  private Set<KPoint> interiorpoints=null;
   
   /**
-   * @return all points that are inside the area of the polygon, including the perimeter points.
+   * @return all points that are inside the area of the polygon (including points that are on the polygon edge)
    * 
    * For each interior seg
    * get all of the points it crosses. Not just the end points but also the points in between the end points.
    * Put them in a set.
+   * 
+   * We return a copy of the cached interiorpoints, for security.
    */
   public Set<KPoint> getInteriorPoints(){
     

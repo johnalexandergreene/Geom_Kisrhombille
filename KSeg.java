@@ -1,5 +1,8 @@
 package org.fleen.geom_Kisrhombille;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.fleen.geom_2D.DPoint;
 import org.fleen.geom_2D.GD;
 
@@ -41,7 +44,8 @@ public class KSeg{
   
   /*
    * ################################
-   * VERTICES
+   * POINTS
+   * yes, we are calling some of these vertices. that's wrong. but to change them would break stuff so maybe later.
    * ################################
    */
   
@@ -67,6 +71,30 @@ public class KSeg{
       s1p1=s.vertex1.getBasicPoint2D();
     boolean i=GD.getIntersection_SegSeg(s0p0.x,s0p0.y,s0p1.x,s0p1.y,s1p0.x,s1p0.y,s1p1.x,s1p1.y)!=null;
     return i;}
+  
+  /*
+   * ++++++++++++++++++++++++++++++++
+   * BETWEEN POINTS
+   * ++++++++++++++++++++++++++++++++
+   */
+  
+  List<KPoint> betweenpoints=null;
+  
+  /*
+   * return the points between the end points of this seg
+   */
+  public List<KPoint> getBetweenPoints(){
+    if(betweenpoints==null)
+      initBetweenPoints();
+    return betweenpoints;}
+  
+  private void initBetweenPoints(){
+    betweenpoints=new ArrayList<KPoint>();
+    int d=vertex0.getDirection(vertex1);
+    KPoint p0=vertex0.getVertex_Adjacent(d);
+    while(!p0.equals(vertex1)){
+      betweenpoints.add(p0);
+      p0=p0.getVertex_Adjacent(d);}}
   
   /*
    * ################################
